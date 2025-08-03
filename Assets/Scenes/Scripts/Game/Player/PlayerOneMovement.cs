@@ -9,8 +9,8 @@ public class PlayerOneMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float gridSize = 8f;
-    [SerializeField] private float snapThreshold = 0.01f;
+     [SerializeField] private float gridSize = 8f;
+     [SerializeField] private float snapThreshold = 0.01f;
     [SerializeField] private LayerMask layerChecks;
 
 

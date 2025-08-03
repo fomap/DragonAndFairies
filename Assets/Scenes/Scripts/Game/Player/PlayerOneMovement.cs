@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
+
 public class PlayerOneMovement : MonoBehaviour
 {
+    // [Header("PlayerOffset")]
+    // [SerializeField] GameObject player;
+
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
-     [SerializeField] private float gridSize = 8f;
-     [SerializeField] private float snapThreshold = 0.01f;
+    [SerializeField] private float gridSize = 8f;
+    [SerializeField] private float snapThreshold = 0.01f;
     [SerializeField] private LayerMask layerChecks;
 
 
@@ -19,25 +25,27 @@ public class PlayerOneMovement : MonoBehaviour
     [SerializeField] private List<Vector2> positionHistory = new List<Vector2>();
 
     private PlayerControls playerOneControls;
-    private Rigidbody2D rb;
+    private Rigidbody2D pointRB;
     private bool isMoving = false;
     private Vector2 targetPos;
     private Vector2 movementInput;
+    private Transform currentParent;
     private int Transform;
 
 
     private void Awake()
     {
         playerOneControls = new PlayerControls();
-        rb = GetComponent<Rigidbody2D>();
+        pointRB = GetComponent<Rigidbody2D>();
 
         foreach (Transform child in transform)
         {
+
             Chunks.Add(child);
             positionHistory.Add(child.position);
         }
 
-        Transform = Chunks.Count;
+       Transform = Chunks.Count;
 
     }
 
@@ -58,15 +66,15 @@ public class PlayerOneMovement : MonoBehaviour
 
         if (isMoving)
         {
-            rb.position = Vector2.MoveTowards(
-                rb.position,
+            pointRB.position = Vector2.MoveTowards(
+                pointRB.position,
                 targetPos,
                 moveSpeed * Time.deltaTime
             );
 
-            if (Vector2.Distance(rb.position, targetPos) < snapThreshold)
+            if (Vector2.Distance(pointRB.position, targetPos) < snapThreshold)
             {
-                rb.position = targetPos;
+                pointRB.position = targetPos;
                 isMoving = false;
             }
         }
@@ -79,8 +87,10 @@ public class PlayerOneMovement : MonoBehaviour
 
         movementInput = context.ReadValue<Vector2>();
         Vector2 moveDirection = GetPrimaryDirection(movementInput);
-        Vector2 lastDirection = -moveDirection;
-        Debug.Log(moveDirection + "Yolo" + lastDirection);
+        
+
+    //     Vector2 lastDirection = -moveDirection;
+        //    // Debug.Log(moveDirection + "Yolo" + lastDirection);
 
         if (moveDirection != Vector2.zero)
         {
@@ -90,31 +100,38 @@ public class PlayerOneMovement : MonoBehaviour
 
     }
 
-private void TryToMove(Vector2 direction)
-{
-    Vector2 newHeadPosition = (Vector2)transform.position + direction;
+    private void TryToMove(Vector2 direction)
+    {
 
-    if (WouldIntersectSelf(newHeadPosition))
-    {
-        Debug.Log("I can't do this anymore");
-        return;
+        Vector2 newHeadPosition = (Vector2)transform.position + direction;
+
+        if (WouldIntersectSelf(newHeadPosition))
+        {
+           // Debug.Log("I can't do this anymore");
+            return;
+        }
+
+        if (Physics2D.OverlapCircle(newHeadPosition, 0.45f, layerChecks))
+        {
+            return;
+        }
+
+        
+        transform.position = newHeadPosition;
+
+        positionHistory.Insert(0, transform.position);
+        int index = 0;
+        foreach (var body in Chunks)
+        {
+            Vector2 point = positionHistory[Mathf.Min(index, positionHistory.Count - 1)];
+            body.transform.position = point;
+            // player.transform.position = point;
+            index++;
+        }
+
+
+
     }
-    
-    if (Physics2D.OverlapCircle(newHeadPosition, 0.45f, layerChecks)) 
-    {
-        return;
-    }
-    transform.position = newHeadPosition;
-    
-    positionHistory.Insert(0, transform.position);
-    int index = 0;
-    foreach (var body in Chunks)
-    {
-        Vector2 point = positionHistory[Mathf.Min(index, positionHistory.Count - 1)];
-        body.transform.position = point;
-        index++;
-    }
-}
 
 
     private Vector2 GetPrimaryDirection(Vector2 input)
@@ -129,21 +146,21 @@ private void TryToMove(Vector2 direction)
         }
         return Vector2.zero;
     }
-    
+
 
 
     private bool WouldIntersectSelf(Vector2 newHeadPosition)
-{
-
-    for (int i = 1; i < Chunks.Count; i++)
     {
-        if (Vector2.Distance(newHeadPosition, Chunks[i].position) < 0.4f * gridSize)
+
+        for (int i = 1; i < Chunks.Count; i++)
         {
-            return true;
+            if (Vector2.Distance(newHeadPosition, Chunks[i].position) < 0.4f * gridSize)
+            {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 }
 
 

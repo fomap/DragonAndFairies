@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +13,8 @@ public class PlayerOneMovement : MonoBehaviour
 {
     // [Header("PlayerOffset")]
     // [SerializeField] GameObject player;
+
+    public event Action<Vector2> OnValidMovement;
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
@@ -87,10 +90,11 @@ public class PlayerOneMovement : MonoBehaviour
 
         movementInput = context.ReadValue<Vector2>();
         Vector2 moveDirection = GetPrimaryDirection(movementInput);
-        
+
         if (moveDirection != Vector2.zero)
         {
             TryToMove(moveDirection * gridSize);
+            
 
         }
 
@@ -113,7 +117,7 @@ public class PlayerOneMovement : MonoBehaviour
 
         
         transform.position = newHeadPosition;
-
+     
         positionHistory.Insert(0, transform.position);
         int index = 0;
         foreach (var body in Chunks)

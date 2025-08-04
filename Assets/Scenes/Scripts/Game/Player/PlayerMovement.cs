@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,6 +25,12 @@ public class PlayerMovement : MonoBehaviour
     private string lastDirection = "Down";
     private Vector2 movementInput;
     
+    
+       [Header("Win Settings")]
+        [SerializeField] public int minBoxesNumber = 1;
+    [SerializeField] public static int currentBoxes;
+    [SerializeField] private string nextLevel = "";
+    
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -41,13 +48,25 @@ public class PlayerMovement : MonoBehaviour
         playerControls.Disable();
         playerControls.Player.Player2.performed -= OnMovementPerformed;
     }
-    
+
     private void Update()
     {
         HandleMovement();
         HandleAnimations();
+        CheckWin();
     }
+
+
+
+    private void CheckWin()
+    {
+        if (currentBoxes >= minBoxesNumber)
+        {
+            SceneManager.LoadScene(nextLevel);
     
+        }
+    }
+
     private void HandleAnimations()
     {
         if (animator == null) return;

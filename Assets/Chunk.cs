@@ -7,7 +7,7 @@ public class Chunk : MonoBehaviour
     IEnumerator OnTriggerEnter2D(Collider2D other)
     {
         // Check if the colliding object is the player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
             // Make the player a child of the chunk when they enter
 
@@ -19,7 +19,7 @@ public class Chunk : MonoBehaviour
     IEnumerator OnTriggerExit2D(Collider2D other)
     {
         // Check if the object leaving is the player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
             // Detach the player from the chunk when they exit
             yield return null; 

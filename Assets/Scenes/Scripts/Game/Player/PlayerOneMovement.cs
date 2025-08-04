@@ -88,10 +88,6 @@ public class PlayerOneMovement : MonoBehaviour
         movementInput = context.ReadValue<Vector2>();
         Vector2 moveDirection = GetPrimaryDirection(movementInput);
         
-
-    //     Vector2 lastDirection = -moveDirection;
-        //    // Debug.Log(moveDirection + "Yolo" + lastDirection);
-
         if (moveDirection != Vector2.zero)
         {
             TryToMove(moveDirection * gridSize);
@@ -107,7 +103,6 @@ public class PlayerOneMovement : MonoBehaviour
 
         if (WouldIntersectSelf(newHeadPosition))
         {
-           // Debug.Log("I can't do this anymore");
             return;
         }
 
@@ -125,11 +120,8 @@ public class PlayerOneMovement : MonoBehaviour
         {
             Vector2 point = positionHistory[Mathf.Min(index, positionHistory.Count - 1)];
             body.transform.position = point;
-            // player.transform.position = point;
             index++;
         }
-
-
 
     }
 

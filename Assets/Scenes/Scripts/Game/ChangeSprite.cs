@@ -12,32 +12,41 @@ public class ChangeSprite : MonoBehaviour
     [SerializeField] private Sprite upSprite;
     [SerializeField] private Sprite downSprite;
 
-     [SerializeField] private PlayerOneMovement snakeMovement; 
+  
 
     private PlayerControls playerControls;
     private Vector2 movementInput;
     private string lastDirection = "Down";
     private SpriteRenderer spriteRenderer;
+      [SerializeField] private PlayerOneMovement snakeMovement; 
 
     private void Awake()
     {
-        playerControls = new PlayerControls();
-        spriteRenderer = GetComponent<SpriteRenderer>();
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
         
 
+ 
     private void OnEnable()
     {
-        playerControls.Enable();
-        playerControls.Player.Player1.performed += OnMovementPerformed;
+        snakeMovement.OnMovementAttempted += HandleMovementAttempt;
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
-        playerControls.Player.Player1.performed -= OnMovementPerformed;
+        snakeMovement.OnMovementAttempted -= HandleMovementAttempt;
+    }
+
+       private void HandleMovementAttempt(Vector2 direction, bool success)
+    {
+        if (success)
+        {
+            UpdateLastDirection(direction);
+            ChangeSnakeSprite(lastDirection);
+        }
+       
     }
 
     private void OnMovementPerformed(InputAction.CallbackContext context)

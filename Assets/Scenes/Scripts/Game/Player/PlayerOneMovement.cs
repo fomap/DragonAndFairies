@@ -14,7 +14,7 @@ public class PlayerOneMovement : MonoBehaviour
     // [Header("PlayerOffset")]
     // [SerializeField] GameObject player;
 
-    public event Action<Vector2> OnValidMovement;
+    public event Action<Vector2, bool> OnMovementAttempted;
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
@@ -99,26 +99,25 @@ public class PlayerOneMovement : MonoBehaviour
         }
 
     }
-
-    private void TryToMove(Vector2 direction)
+      private bool TryToMove(Vector2 direction)
     {
-
         Vector2 newHeadPosition = (Vector2)transform.position + direction;
 
         if (WouldIntersectSelf(newHeadPosition))
         {
-            return;
+            OnMovementAttempted?.Invoke(direction, false);
+            return false;
         }
 
         if (Physics2D.OverlapCircle(newHeadPosition, 0.45f, layerChecks))
         {
-            return;
+            OnMovementAttempted?.Invoke(direction, false);
+            return false;
         }
 
-        
         transform.position = newHeadPosition;
-     
         positionHistory.Insert(0, transform.position);
+        
         int index = 0;
         foreach (var body in Chunks)
         {
@@ -127,7 +126,38 @@ public class PlayerOneMovement : MonoBehaviour
             index++;
         }
 
+        OnMovementAttempted?.Invoke(direction, true);
+        return true;
     }
+
+    // private void TryToMove(Vector2 direction)
+    // {
+
+    //     Vector2 newHeadPosition = (Vector2)transform.position + direction;
+
+    //     if (WouldIntersectSelf(newHeadPosition))
+    //     {
+    //         return;
+    //     }
+
+    //     if (Physics2D.OverlapCircle(newHeadPosition, 0.45f, layerChecks))
+    //     {
+    //         return;
+    //     }
+
+
+    //     transform.position = newHeadPosition;
+    //    // OnValidMovement?.Invoke(direction);
+    //     positionHistory.Insert(0, transform.position);
+    //     int index = 0;
+    //     foreach (var body in Chunks)
+    //     {
+    //         Vector2 point = positionHistory[Mathf.Min(index, positionHistory.Count - 1)];
+    //         body.transform.position = point;
+    //         index++;
+    //     }
+
+    // }
 
 
     private Vector2 GetPrimaryDirection(Vector2 input)

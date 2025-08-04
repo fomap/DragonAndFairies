@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     public void Play()
     {
-        SceneManager.LoadScene("SandBox");
+        SceneManager.LoadScene("lvl0");
     }
 
     // Update is called once per frame

@@ -30,17 +30,21 @@ public class PlayerMovement : MonoBehaviour
         [SerializeField] public int minBoxesNumber = 1;
     [SerializeField] public static int currentBoxes;
     [SerializeField] private string nextLevel = "";
-    
+
     private void Awake()
+
     {
+
         playerControls = new PlayerControls();
         rb = GetComponent<Rigidbody2D>();
+        currentBoxes = 0;
     }
-    
+
     private void OnEnable()
     {
         playerControls.Enable();
         playerControls.Player.Player2.performed += OnMovementPerformed;
+        
     }
     
     private void OnDisable()

@@ -9,9 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Scenes/TitleScreen.unity
     guid: 62533d5e48988174dade52494a8e04b4
   - enabled: 1
-    path: Assets/Scenes/Scenes/SandBox.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Scenes/lvl0.unity
+    guid: 6ea496e34620eb24190fc927fb3283f2
   - enabled: 1
     path: Assets/Scenes/Scenes/lvl1.unity
-    guid: c537b5456d55c3b47ab488b910c9ff99
+    guid: b0ee3f84f8e56bd42b85d0f174d70a3f
+  - enabled: 1
+    path: Assets/Scenes/Scenes/lvl2.unity
+    guid: 9f23e80503bceab4f8a3896d7960b71c
   m_configObjects: {}

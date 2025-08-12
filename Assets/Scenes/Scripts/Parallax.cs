@@ -5,8 +5,8 @@ public class Parallax : MonoBehaviour
     private float startPosX, startPosY;
     private float length, height;
     public GameObject cam;
- public float parallaxEffectX = 0.5f;
-public float parallaxEffectY = 0.5f;
+    public float parallaxEffectX = 0.5f;
+    public float parallaxEffectY = 0.5f;
 
     void Start()
     {

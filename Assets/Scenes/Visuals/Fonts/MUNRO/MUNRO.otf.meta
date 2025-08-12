@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 725467bc54a302943a826741f469326e
+guid: 7d12b7c7cb842754b9d8d461ab609e0f
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,10 +9,10 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Pixelify Sans
+  - Munro(RUS BY hidsky41)
   fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 0
+  fontRenderingMode: 2
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1

@@ -1,12 +1,13 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+
     [Header("Movement Settings")]
     [SerializeField] private float gridSize = 1f;
     [SerializeField] private LayerMask wallLayer;
@@ -31,10 +32,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public static int currentBoxes;
     [SerializeField] private string nextLevel = "";
 
+
+    public static event Action CameraZoomOut;
+
+    public void DoSomethingAndNotify()
+    {
+        
+        CameraZoomOut?.Invoke(); 
+    }
+
     private void Awake()
 
     {
-
+       
         playerControls = new PlayerControls();
         rb = GetComponent<Rigidbody2D>();
         currentBoxes = 0;
@@ -66,8 +76,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (currentBoxes >= minBoxesNumber)
         {
-            SceneManager.LoadScene(nextLevel);
-    
+            //SceneManager.LoadScene(nextLevel);
+
+            DoSomethingAndNotify();
+            
         }
     }
 

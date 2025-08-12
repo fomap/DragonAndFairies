@@ -1781,7 +1781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &246655998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3625,8 +3625,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3661,7 +3661,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -22.501314, w: 0}
+  m_margin: {x: 0, y: 0, z: -22.501314, w: -5.0173836}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -3728,7 +3728,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9.29, y: 3.02}
+  m_AnchoredPosition: {x: 14.5, y: -20.1}
   m_SizeDelta: {x: 16.2373, y: 2.0003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &479049738
@@ -4149,7 +4149,7 @@ Camera:
   far clip plane: 1000
   field of view: 112
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4174,7 +4174,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: -10}
+  m_LocalPosition: {x: 25, y: -20.7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10871,7 +10871,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1815411476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14586,13 +14586,13 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 1443714715108135357}
   - {fileID: 851066035}
   - {fileID: 5509573334472660430}
   - {fileID: 63142916}
   - {fileID: 246655999}
   - {fileID: 1965831520}
+  - {fileID: 519420032}
   - {fileID: 474187134}
   - {fileID: 1815411479}
   - {fileID: 551982550645280280}

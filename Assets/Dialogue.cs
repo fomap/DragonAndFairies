@@ -18,16 +18,16 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private string[] dialogueWords;
     [SerializeField] private Sprite[] portraits;
 
-    [Header("StartGame")]
-    [SerializeField] private GameObject dragon;
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject box;
+    
+    [Header("Typewriter Effect")]
+    [SerializeField] private float typewriterSpeed = 0.05f; 
     
     private int currentIndex;
+    private bool isTyping = false;
+    private Coroutine typingCoroutine;
 
     void Start()
     {
-        
         if (HasDialogueContent())
         {
             ShowDialogue(0);
@@ -36,29 +36,31 @@ public class Dialogue : MonoBehaviour
         {
             Debug.LogWarning("Dialogue arrays are empty!");
         }
-
-        // dragon.SetActive(false);
-        // player.SetActive(false);
-        // box.SetActive(false);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.RightArrow)) 
         {
-            if (currentIndex < dialogueWords.Length - 1)
+            if (isTyping)
+            {
+               
+                SkipTyping();
+            }
+            else if (currentIndex < dialogueWords.Length - 1)
             {
                 currentIndex++;
                 ShowDialogue(currentIndex);
             }
-            else
-            {
-               // EndDialogue();
-            }
         }
         else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.LeftArrow)) 
         {
-            if (currentIndex > 0)
+            if (isTyping)
+            {
+                
+                SkipTyping();
+            }
+            else if (currentIndex > 0)
             {
                 currentIndex--;
                 ShowDialogue(currentIndex);
@@ -74,16 +76,43 @@ public class Dialogue : MonoBehaviour
     private void ShowDialogue(int index)
     {
         speakerText.text = speaker[index];
-        dialogueText.text = dialogueWords[index];
         portraitImage.sprite = portraits[index];
         currentIndex = index;
+        
+        // typewriter effect
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        typingCoroutine = StartCoroutine(TypeText(dialogueWords[index]));
+    }
+
+    private IEnumerator TypeText(string text)
+    {
+        isTyping = true;
+        dialogueText.text = "";
+        
+        foreach (char letter in text.ToCharArray())
+        {
+            dialogueText.text += letter;
+            yield return new WaitForSeconds(typewriterSpeed);
+        }
+        
+        isTyping = false;
+    }
+
+    private void SkipTyping()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        dialogueText.text = dialogueWords[currentIndex];
+        isTyping = false;
     }
 
     private void EndDialogue()
     {
         dialogueCanvas.SetActive(false);
-        // dragon.SetActive(true);
-        // player.SetActive(true);
-        // box.SetActive(true);
     }
 }

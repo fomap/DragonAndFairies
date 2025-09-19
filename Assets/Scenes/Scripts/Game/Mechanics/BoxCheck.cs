@@ -17,8 +17,8 @@ public class BoxCheck : MonoBehaviour
         if (other.CompareTag("Point"))
         {
             //  spriteRenderer.color = Color.green;
-            PlayerMovement.currentBoxes++;
-            Debug.Log(PlayerMovement.currentBoxes);
+            FairyMovement.currentBoxes++;
+            Debug.Log(FairyMovement.currentBoxes);
         }
 
     }
@@ -29,8 +29,8 @@ public class BoxCheck : MonoBehaviour
         if (other.CompareTag("Point"))
         {
            // spriteRenderer.color = Color.red;
-            PlayerMovement.currentBoxes--;
-             Debug.Log(PlayerMovement.currentBoxes);
+            FairyMovement.currentBoxes--;
+             Debug.Log(FairyMovement.currentBoxes);
         }
 
     }

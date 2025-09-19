@@ -5,34 +5,34 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scenes/DEMO/main.unity
     guid: 85aef6b78c071de48b82dd8a1afe544e
-  - enabled: 1
-    path: Assets/Scenes/Scenes/DEMO/1.unity
+  - enabled: 0
+    path: Assets/Scenes/Scenes/Dialogue.unity
     guid: 1575b1d3f6d8e124398279278e018dcb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scenes/DEMO/2.unity
     guid: b29898647b202e946961a5cbe1c4e70c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scenes/DEMO/3.unity
     guid: f5ff51d60dc2cf041b694bb9891c77c9
   - enabled: 0
     path: Assets/Scenes/Scenes/TitleScreen.unity
     guid: 62533d5e48988174dade52494a8e04b4
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Scenes/lvl0.unity
     guid: 6d5c612d1dc3ace49aeead00de2b6af4
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Scenes/lvl1.unity
     guid: 6ef81beb79922ed4ba28ccfefe32ea5e
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Scenes/lvl2.unity
     guid: f7c8eae4bd88a204499c13cba904542b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Scenes/lvl3.unity
     guid: 55de577da3212dd43a12b79dabfdbb01
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Scenes/lvl4.unity
     guid: b81a5d731c91362478d269c98cb7e960
   - enabled: 0

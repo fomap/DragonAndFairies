@@ -13,11 +13,11 @@ public class ZoomOut : MonoBehaviour
     private float zoomSpeed = 5f;
     private void OnEnable()
     {
-        PlayerMovement.CameraZoomOut += ZoomOutCinema;   
+        FairyMovement.CameraZoomOut += ZoomOutCinema;   
     }
     private void OnDisable()
     {
-        PlayerMovement.CameraZoomOut -= ZoomOutCinema; 
+        FairyMovement.CameraZoomOut -= ZoomOutCinema; 
     }
     // Start is called before the first frame update
     void Awake()

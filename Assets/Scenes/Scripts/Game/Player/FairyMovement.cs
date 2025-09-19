@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class FairyMovement : MonoBehaviour
 {
-
 
     [Header("Movement Settings")]
     [SerializeField] private float gridSize = 1f;
@@ -27,8 +26,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movementInput;
     
     
-       [Header("Win Settings")]
-        [SerializeField] public int minBoxesNumber = 1;
+    [Header("Win Settings")]
+    [SerializeField] public int minBoxesNumber = 1;
     [SerializeField] public static int currentBoxes;
     [SerializeField] private string nextLevel = "";
 
@@ -65,20 +64,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        
+    }
+
+    private void FixedUpdate()
+    {
         HandleMovement();
         HandleAnimations();
         CheckWin();
     }
 
-
-
     private void CheckWin()
     {
         if (currentBoxes >= minBoxesNumber)
         {
-            //SceneManager.LoadScene(nextLevel);
 
             DoSomethingAndNotify();
+            SceneManager.LoadScene(nextLevel);
             
         }
     }

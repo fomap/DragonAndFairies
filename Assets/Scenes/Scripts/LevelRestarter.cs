@@ -17,7 +17,7 @@ public class LevelRestarter : MonoBehaviour
     // }
     private void Start()
     {
-        StartCoroutine(CheckObjectsParent());
+        // StartCoroutine(CheckObjectsParent());
     }
 
     private void Update()
@@ -29,32 +29,32 @@ public class LevelRestarter : MonoBehaviour
         }
     }
 
-    private IEnumerator CheckObjectsParent()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(checkInterval);
+    // private IEnumerator CheckObjectsParent()
+    // {
+    //     while (true)
+    //     {
+    //         yield return new WaitForSeconds(checkInterval);
             
-            // Check player
-            GameObject player = GameObject.FindGameObjectWithTag(playerTag);
-            if (player != null && !Chunk.IsObjectInAnyChunk(player.transform))
-            {
-                RestartLevel();
-                yield break;
-            }
+    //         // Check player
+    //         GameObject player = GameObject.FindGameObjectWithTag(playerTag);
+    //         if (player != null && !Chunk.IsObjectInAnyChunk(player.transform))
+    //         {
+    //             RestartLevel();
+    //             yield break;
+    //         }
             
-            // Check all boxes
-            GameObject[] boxes = GameObject.FindGameObjectsWithTag(boxTag);
-            foreach (var box in boxes)
-            {
-                if (!Chunk.IsObjectInAnyChunk(box.transform))
-                {
-                    RestartLevel();
-                    yield break;
-                }
-            }
-        }
-    }
+    //         // Check all boxes
+    //         GameObject[] boxes = GameObject.FindGameObjectsWithTag(boxTag);
+    //         foreach (var box in boxes)
+    //         {
+    //             if (!Chunk.IsObjectInAnyChunk(box.transform))
+    //             {
+    //                 RestartLevel();
+    //                 yield break;
+    //             }
+    //         }
+    //     }
+    // }
 
     private void RestartLevel()
     {

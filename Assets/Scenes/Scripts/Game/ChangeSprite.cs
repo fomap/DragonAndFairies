@@ -18,7 +18,7 @@ public class ChangeSprite : MonoBehaviour
     private Vector2 movementInput;
     private string lastDirection = "Down";
     private SpriteRenderer spriteRenderer;
-      [SerializeField] private PlayerOneMovement snakeMovement; 
+   [SerializeField] private PlayerOneMovement snakeMovement; 
 
     private void Awake()
     {

@@ -4,46 +4,39 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+
 public class FairyMovement : MonoBehaviour
 {
-
     [Header("Movement Settings")]
     [SerializeField] private float gridSize = 1f;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask boxLayer;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float boxMoveSpeed = 8f;
     [SerializeField] private float snapThreshold = 0.01f;
-    
+
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
-    [SerializeField] private float boxMoveSpeed = 8f;
-    
-    private PlayerControls playerControls;
-    private Rigidbody2D rb;
-    private bool isMoving = false;
-    private Vector2 targetPos;
     private string lastDirection = "Down";
-    private Vector2 movementInput;
-    
-    
+
     [Header("Win Settings")]
     [SerializeField] public int minBoxesNumber = 1;
-    [SerializeField] public static int currentBoxes;
     [SerializeField] private string nextLevel = "";
 
-
+    public static int currentBoxes;
     public static event Action CameraZoomOut;
 
-    public void DoSomethingAndNotify()
-    {
-        
-        CameraZoomOut?.Invoke(); 
-    }
+    private PlayerControls playerControls;
+    private Rigidbody2D rb;
+
+    // Movement state
+    private Vector2 movementInput;
+    private Vector3 targetPos;
+    private bool isSmoothingMovement = false;
+    private bool isMoving = false;
 
     private void Awake()
-
     {
-       
         playerControls = new PlayerControls();
         rb = GetComponent<Rigidbody2D>();
         currentBoxes = 0;
@@ -52,24 +45,26 @@ public class FairyMovement : MonoBehaviour
     private void OnEnable()
     {
         playerControls.Enable();
-        playerControls.Player.Player2.performed += OnMovementPerformed;
-        
+        playerControls.Player.Fey.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
+        playerControls.Player.Fey.canceled += ctx =>
+        {
+            movementInput = Vector2.zero;
+            isMoving = false;
+        };
     }
-    
+
     private void OnDisable()
     {
         playerControls.Disable();
-        playerControls.Player.Player2.performed -= OnMovementPerformed;
-    }
-
-    private void Update()
-    {
-        
     }
 
     private void FixedUpdate()
     {
-        HandleMovement();
+        if (!isSmoothingMovement && movementInput != Vector2.zero)
+        {
+            TryMove(movementInput);
+        }
+
         HandleAnimations();
         CheckWin();
     }
@@ -78,10 +73,8 @@ public class FairyMovement : MonoBehaviour
     {
         if (currentBoxes >= minBoxesNumber)
         {
-
-            DoSomethingAndNotify();
+            CameraZoomOut?.Invoke();
             SceneManager.LoadScene(nextLevel);
-            
         }
     }
 
@@ -91,44 +84,15 @@ public class FairyMovement : MonoBehaviour
         string animationName = isMoving ? "Walking" : "Idle";
         animator.Play(animationName + lastDirection);
     }
-    
-    private void HandleMovement()
-    {
-        if (isMoving)
-        {
-            rb.position = Vector2.MoveTowards(
-                rb.position,
-                targetPos,
-                moveSpeed * Time.deltaTime
-            );
 
-            if (Vector2.Distance(rb.position, targetPos) < snapThreshold)
-            {
-                rb.position = targetPos;
-                isMoving = false;
-            }
-        }
-    }
-    
-    private void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        if (isMoving) return;
-        
-        movementInput = context.ReadValue<Vector2>();
-        Vector2 moveDirection = GetPrimaryDirection(movementInput);
-        
-        if (moveDirection != Vector2.zero)
-        {
-            UpdateLastDirection(moveDirection);
-            TryToMove(moveDirection * gridSize);
-        }
-    }
-    
-    private void TryToMove(Vector2 direction)
+    private void TryMove(Vector2 direction)
     {
         Vector2 newPos = GetGridAlignedPosition(rb.position + direction);
+
+        // Wall check
         if (Physics2D.OverlapCircle(newPos, 0.45f, wallLayer)) return;
 
+        // Box pushing check
         Collider2D box = Physics2D.OverlapCircle(newPos, 0.45f, boxLayer);
         if (box != null)
         {
@@ -138,25 +102,49 @@ public class FairyMovement : MonoBehaviour
             StartCoroutine(MoveBoxSmoothly(box.transform, newBoxPos));
         }
 
+        // Start smooth movement
         targetPos = newPos;
-        isMoving = true;
+        StartCoroutine(SmoothMovement(targetPos));
+
+        UpdateLastDirection(direction);
     }
-    
-   
-    private Vector2 GetGridAlignedPosition(Vector2 position)
+
+    private IEnumerator SmoothMovement(Vector3 targetPosition)
     {
-        return new Vector2(
-            Mathf.Round(position.x / gridSize) * gridSize,
-            Mathf.Round(position.y / gridSize) * gridSize
-        );
+        isSmoothingMovement = true;
+        isMoving = true;
+
+        float remainingDistance = Vector3.Distance(transform.position, targetPosition);
+
+        while (remainingDistance > snapThreshold)
+        {
+            rb.position = Vector3.MoveTowards(
+                rb.position,
+                targetPosition,
+                moveSpeed * Time.deltaTime
+            );
+
+            remainingDistance = Vector3.Distance(rb.position, targetPosition);
+            yield return null;
+        }
+
+        rb.position = targetPosition;
+        isSmoothingMovement = false;
+        isMoving = false;
+
+        // Auto-continue if holding input
+        if (movementInput != Vector2.zero)
+        {
+            TryMove(movementInput);
+        }
     }
-    
+
     private IEnumerator MoveBoxSmoothly(Transform box, Vector2 targetPosition)
     {
         Vector2 startPosition = box.position;
         float journeyLength = Vector2.Distance(startPosition, targetPosition);
         float startTime = Time.time;
-        
+
         while (Vector2.Distance(box.position, targetPosition) > snapThreshold)
         {
             float distanceCovered = (Time.time - startTime) * boxMoveSpeed;
@@ -164,22 +152,18 @@ public class FairyMovement : MonoBehaviour
             box.position = Vector2.Lerp(startPosition, targetPosition, fractionOfJourney);
             yield return null;
         }
-        
+
         box.position = targetPosition;
     }
-        private Vector2 GetPrimaryDirection(Vector2 input)
+
+    private Vector2 GetGridAlignedPosition(Vector2 position)
     {
-        if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-        {
-            return new Vector2(Mathf.Sign(input.x), 0);
-        }
-        else if (input.y != 0)
-        {
-            return new Vector2(0, Mathf.Sign(input.y));
-        }
-        return Vector2.zero;
+        return new Vector2(
+            Mathf.Round(position.x / gridSize) * gridSize,
+            Mathf.Round(position.y / gridSize) * gridSize
+        );
     }
-    
+
     private void UpdateLastDirection(Vector2 direction)
     {
         if (direction.x > 0) lastDirection = "Right";
@@ -187,6 +171,5 @@ public class FairyMovement : MonoBehaviour
         else if (direction.y > 0) lastDirection = "Up";
         else if (direction.y < 0) lastDirection = "Down";
     }
-    
-    
 }
+

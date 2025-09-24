@@ -93,21 +93,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""4e53411c-5eb5-40f4-b8ff-7b2cfd4ecba0"",
             ""actions"": [
                 {
-                    ""name"": ""Player1"",
+                    ""name"": ""Dragon"",
                     ""type"": ""Value"",
                     ""id"": ""c5244026-a8d0-4e18-884b-d2197fe8666b"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Player2"",
+                    ""name"": ""Fey"",
                     ""type"": ""Value"",
                     ""id"": ""bf631ab5-0d08-473d-9c11-e59d09c3b319"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -128,7 +128,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Player1"",
+                    ""action"": ""Dragon"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -139,7 +139,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player1"",
+                    ""action"": ""Dragon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -150,7 +150,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player1"",
+                    ""action"": ""Dragon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -161,7 +161,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player1"",
+                    ""action"": ""Dragon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -172,7 +172,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player1"",
+                    ""action"": ""Dragon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -183,7 +183,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Player2"",
+                    ""action"": ""Fey"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -194,7 +194,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player2"",
+                    ""action"": ""Fey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -205,7 +205,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player2"",
+                    ""action"": ""Fey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -216,7 +216,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player2"",
+                    ""action"": ""Fey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -227,7 +227,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Player2"",
+                    ""action"": ""Fey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -354,8 +354,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Player1 = m_Player.FindAction("Player1", throwIfNotFound: true);
-        m_Player_Player2 = m_Player.FindAction("Player2", throwIfNotFound: true);
+        m_Player_Dragon = m_Player.FindAction("Dragon", throwIfNotFound: true);
+        m_Player_Fey = m_Player.FindAction("Fey", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
     }
 
@@ -437,8 +437,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Player1;
-    private readonly InputAction m_Player_Player2;
+    private readonly InputAction m_Player_Dragon;
+    private readonly InputAction m_Player_Fey;
     private readonly InputAction m_Player_Fire;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
@@ -452,13 +452,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Player/Player1".
+        /// Provides access to the underlying input action "Player/Dragon".
         /// </summary>
-        public InputAction @Player1 => m_Wrapper.m_Player_Player1;
+        public InputAction @Dragon => m_Wrapper.m_Player_Dragon;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Player2".
+        /// Provides access to the underlying input action "Player/Fey".
         /// </summary>
-        public InputAction @Player2 => m_Wrapper.m_Player_Player2;
+        public InputAction @Fey => m_Wrapper.m_Player_Fey;
         /// <summary>
         /// Provides access to the underlying input action "Player/Fire".
         /// </summary>
@@ -489,12 +489,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Player1.started += instance.OnPlayer1;
-            @Player1.performed += instance.OnPlayer1;
-            @Player1.canceled += instance.OnPlayer1;
-            @Player2.started += instance.OnPlayer2;
-            @Player2.performed += instance.OnPlayer2;
-            @Player2.canceled += instance.OnPlayer2;
+            @Dragon.started += instance.OnDragon;
+            @Dragon.performed += instance.OnDragon;
+            @Dragon.canceled += instance.OnDragon;
+            @Fey.started += instance.OnFey;
+            @Fey.performed += instance.OnFey;
+            @Fey.canceled += instance.OnFey;
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
@@ -509,12 +509,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="PlayerActions" />
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @Player1.started -= instance.OnPlayer1;
-            @Player1.performed -= instance.OnPlayer1;
-            @Player1.canceled -= instance.OnPlayer1;
-            @Player2.started -= instance.OnPlayer2;
-            @Player2.performed -= instance.OnPlayer2;
-            @Player2.canceled -= instance.OnPlayer2;
+            @Dragon.started -= instance.OnDragon;
+            @Dragon.performed -= instance.OnDragon;
+            @Dragon.canceled -= instance.OnDragon;
+            @Fey.started -= instance.OnFey;
+            @Fey.performed -= instance.OnFey;
+            @Fey.canceled -= instance.OnFey;
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
@@ -624,19 +624,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Player1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Dragon" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPlayer1(InputAction.CallbackContext context);
+        void OnDragon(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Player2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Fey" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPlayer2(InputAction.CallbackContext context);
+        void OnFey(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Fire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

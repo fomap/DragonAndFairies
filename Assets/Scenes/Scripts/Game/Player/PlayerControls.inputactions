@@ -7,21 +7,21 @@
             "id": "4e53411c-5eb5-40f4-b8ff-7b2cfd4ecba0",
             "actions": [
                 {
-                    "name": "Player1",
+                    "name": "Dragon",
                     "type": "Value",
                     "id": "c5244026-a8d0-4e18-884b-d2197fe8666b",
                     "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Player2",
+                    "name": "Fey",
                     "type": "Value",
                     "id": "bf631ab5-0d08-473d-9c11-e59d09c3b319",
                     "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": true
                 },
                 {
@@ -42,7 +42,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Player1",
+                    "action": "Dragon",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -53,7 +53,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player1",
+                    "action": "Dragon",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -64,7 +64,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player1",
+                    "action": "Dragon",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -75,7 +75,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player1",
+                    "action": "Dragon",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -86,7 +86,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player1",
+                    "action": "Dragon",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -97,7 +97,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Player2",
+                    "action": "Fey",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -108,7 +108,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player2",
+                    "action": "Fey",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -119,7 +119,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player2",
+                    "action": "Fey",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -130,7 +130,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player2",
+                    "action": "Fey",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -141,7 +141,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Player2",
+                    "action": "Fey",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

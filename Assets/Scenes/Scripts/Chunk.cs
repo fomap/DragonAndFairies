@@ -1,37 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-
-
 public class Chunk : MonoBehaviour
 {
-    private static List<Transform> childrenInChunks = new List<Transform>();
+   
+    private static readonly HashSet<Transform> childrenInChunks = new HashSet<Transform>();
 
-    IEnumerator OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        
         if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-            yield return null; 
             other.transform.SetParent(transform);
-            if (!childrenInChunks.Contains(other.transform))
-            {
-                childrenInChunks.Add(other.transform);
-            }
+            childrenInChunks.Add(other.transform);
         }
     }
 
-    IEnumerator OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-            yield return null; 
             other.transform.SetParent(null);
-            if (childrenInChunks.Contains(other.transform))
-            {
-                childrenInChunks.Remove(other.transform);
-            }
+            childrenInChunks.Remove(other.transform);
+
         }
     }
 
@@ -40,3 +31,5 @@ public class Chunk : MonoBehaviour
         return childrenInChunks.Contains(obj);
     }
 }
+
+

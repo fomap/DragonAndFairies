@@ -8,7 +8,7 @@ public class Chunk : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -19,7 +19,7 @@ public class Chunk : MonoBehaviour
             if (gameObject.activeInHierarchy)
             {
                 ParentObject(other.transform);
-              //  other.GetComponent<FeyNewControl>()?.DisableGravity();
+                //  other.GetComponent<FeyNewControl>()?.DisableGravity();
             }
         }
     }
@@ -32,12 +32,12 @@ public class Chunk : MonoBehaviour
             if (gameObject.activeInHierarchy)
             {
                 UnparentObject(other.transform);
-               // other.GetComponent<FeyNewControl>()?.EnableGravity();
+                // other.GetComponent<FeyNewControl>()?.EnableGravity();
             }
         }
     }
 
-   
+
     public void ForceParentObject(Transform obj)
     {
         StartCoroutine(DelayedParent(obj, true));
@@ -55,7 +55,7 @@ public class Chunk : MonoBehaviour
         obj.SetParent(transform);
         childrenInChunks.Add(obj);
 
-        
+
         if (ChunkManager.Instance != null)
         {
             ChunkManager.Instance.RegisterObjectInChunk(obj, this);
@@ -78,7 +78,7 @@ public class Chunk : MonoBehaviour
 
     private IEnumerator DelayedParent(Transform obj, bool parentToChunk)
     {
-       
+
         yield return null;
 
         if (obj == null) yield break;
@@ -97,5 +97,16 @@ public class Chunk : MonoBehaviour
     {
         return childrenInChunks.Contains(obj);
     }
+    
+    public bool IsPositionInChunk(Vector3 position)
+    {
+        Collider2D chunkCollider = GetComponent<Collider2D>();
+        if (chunkCollider != null)
+        {
+            return chunkCollider.OverlapPoint(position);
+        }
+        return false;
+    }
+
 }
 

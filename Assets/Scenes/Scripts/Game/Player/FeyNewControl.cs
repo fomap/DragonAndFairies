@@ -22,7 +22,16 @@ public class FeyNewControl : MonoBehaviour
 
     [Header("Falling Settings")]
     [SerializeField] private float fallSpeed = 8f;
-    private bool insideChunk = false;
+    [SerializeField] private float maxFallSpeed = 15f;
+    [SerializeField] private float fallAcceleration = 25f;
+
+
+    private bool isFalling = false;
+    private float currentFallVelocity = 0f;
+    private Vector3 fallStartPosition;
+    private bool wasParentedLastFrame = true;
+
+
     // [SerializeField] private float fallCheckInterval = 0.2f;
     // [SerializeField] private LayerMask chunkLayer; // Layer for chunks
 
@@ -37,7 +46,7 @@ public class FeyNewControl : MonoBehaviour
     private bool isSmoothingMovement = false;
     private bool isMoving = false;
     private bool movementEnabled = true;
-    private bool isFalling = false;
+    
 
     
     
@@ -76,28 +85,6 @@ public class FeyNewControl : MonoBehaviour
         // StartCoroutine(CheckForFalling());
     }
 
-    private void Update()
-    {
-        if (!isSmoothingMovement && !isMoving && movementEnabled && !isFalling)
-        {
-            if (Vector2.Distance(transform.position, GetGridAlignedPosition(transform.position)) > 0.01f)
-            {
-                SnapToGrid();
-            }
-        }
-
-        if (Time.frameCount % 30 == 0) // Check every 30 frames
-        {
-            CheckChunkParenting();
-        }
-
-        //  if (!insideChunk && characterRB.gravityScale == 0)
-        // {
-        //     EnableGravity();
-        // }
-
-    }
-
     private void OnEnable()
     {
         controls.Enable();
@@ -110,6 +97,147 @@ public class FeyNewControl : MonoBehaviour
         controls.Disable();
         PlayerOneMovement.OnDragonMovementStarted -= DisableFairyMovement;
         PlayerOneMovement.OnDragonMovementCompleted -= EnableFairyMovement;
+    }
+
+    private void Update()
+    {
+        CheckChunkParentingStatus();
+        HandleFalling();
+        HandleAnimations();
+
+        // if (!isSmoothingMovement && !isMoving && movementEnabled && !isFalling)
+        // {
+        //     if (Vector2.Distance(transform.position, GetGridAlignedPosition(transform.position)) > 0.01f)
+        //     {
+        //         SnapToGrid();
+        //     }
+        // }
+
+        // if (Time.frameCount % 30 == 0) // Check every 30 frames
+        // {
+        //     CheckChunkParenting();
+        // }
+
+        //  if (!insideChunk && characterRB.gravityScale == 0)
+        // {
+        //     EnableGravity();
+        // }
+
+    }
+
+    void FixedUpdate()
+    {
+        if (!movementEnabled) return;
+
+        if (!isFalling && movementInput != Vector2.zero && !isSmoothingMovement)
+        {
+            Vector2 moveDirection = GetPrimaryDirection(movementInput);
+            if (moveDirection != Vector2.zero)
+            {
+                TryMove(moveDirection);
+            }
+        }
+    }
+
+    private void CheckChunkParentingStatus()
+    {
+        bool isCurrentlyParented = IsParentedToChunk();
+        
+        // Start falling if we just lost parenting
+        if (!isCurrentlyParented && wasParentedLastFrame && !isFalling)
+        {
+            StartFalling();
+        }
+        // Stop falling if we just gained parenting
+        else if (isCurrentlyParented && !wasParentedLastFrame && isFalling)
+        {
+            StopFalling();
+        }
+        
+        wasParentedLastFrame = isCurrentlyParented;
+    }
+     private void StartFalling()
+    {
+        if (isFalling) return;
+        
+        Debug.Log("Fey started falling - no chunk parent!");
+        isFalling = true;
+        movementEnabled = false;
+        fallStartPosition = transform.position;
+        currentFallVelocity = 0f;
+        
+        // Stop any active movement coroutines
+        if (isSmoothingMovement)
+        {
+            StopAllCoroutines();
+            isSmoothingMovement = false;
+        }
+        
+        // Unparent completely to ensure clean falling
+        transform.SetParent(null);
+    }
+
+    private void StopFalling()
+    {
+        if (!isFalling) return;
+        
+        Debug.Log("Fey stopped falling - found chunk parent!");
+        isFalling = false;
+        movementEnabled = true;
+        currentFallVelocity = 0f;
+        
+        // Snap to grid when landing
+        SnapToGrid();
+    }
+    
+      private void HandleFalling()
+    {
+        if (!isFalling) return;
+        
+        // Accelerate falling speed
+        currentFallVelocity += fallAcceleration * Time.deltaTime;
+        currentFallVelocity = Mathf.Min(currentFallVelocity, maxFallSpeed);
+        
+        // Move downward
+        Vector3 newPosition = transform.position + Vector3.down * currentFallVelocity * Time.deltaTime;
+        transform.position = newPosition;
+        
+        // Check if we should be parented to any chunk at our new position
+        CheckForChunkAtPosition(newPosition);
+    }
+
+
+    
+    private void CheckForChunkAtPosition(Vector3 position)
+    {
+        // Use ChunkManager to find if we're in any chunk at current position
+        if (ChunkManager.Instance != null)
+        {
+            ChunkManager.Instance.ValidateObjectParenting(transform, "Player");
+            
+            // If we're now parented, stop falling
+            if (IsParentedToChunk())
+            {
+                StopFalling();
+            }
+        }
+    }
+
+
+
+
+
+    private bool IsParentedToChunk()
+    {
+        // Check direct parenting
+        if (transform.parent != null && transform.parent.GetComponent<Chunk>() != null)
+            return true;
+
+        // Check through ChunkManager for redundancy
+        if (ChunkManager.Instance != null && ChunkManager.Instance.IsObjectInAnyChunk(transform))
+            return true;
+
+        return false;
     }
 
     public void SetMovementEnabled(bool enabled)
@@ -136,21 +264,6 @@ public class FeyNewControl : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        if (!movementEnabled || isFalling) return;
-
-        if (movementInput != Vector2.zero && !isSmoothingMovement)
-        {
-            Vector2 moveDirection = GetPrimaryDirection(movementInput);
-            if (moveDirection != Vector2.zero)
-            {
-                TryMove(moveDirection);
-            }
-        }
-
-        HandleAnimations();
-    }
 
     // private IEnumerator CheckForFalling()
     // {
@@ -276,31 +389,31 @@ public class FeyNewControl : MonoBehaviour
     //     movementEnabled = true;
     // }
 
-    private void DisableFairyMovement()
-    {
-        movementEnabled = false;
-        movementInput = Vector2.zero;
-        isMoving = false;
+    // private void DisableFairyMovement()
+    // {
+    //     movementEnabled = false;
+    //     movementInput = Vector2.zero;
+    //     isMoving = false;
 
-        if (isSmoothingMovement)
-        {
-            StopAllCoroutines();
-            isSmoothingMovement = false;
-            SnapToGrid();
-        }
+    //     if (isSmoothingMovement)
+    //     {
+    //         StopAllCoroutines();
+    //         isSmoothingMovement = false;
+    //         SnapToGrid();
+    //     }
 
-        if (isFalling)
-        {
-            StopAllCoroutines();
-            isFalling = false;
-            SnapToGrid();
-        }
-    }
+    //     if (isFalling)
+    //     {
+    //         StopAllCoroutines();
+    //         isFalling = false;
+    //         SnapToGrid();
+    //     }
+    // }
 
-    private void EnableFairyMovement()
-    {
-        movementEnabled = true;
-    }
+    // private void EnableFairyMovement()
+    // {
+    //     movementEnabled = true;
+    // }
 
     private void TryMove(Vector2 direction)
     {
@@ -464,6 +577,49 @@ public class FeyNewControl : MonoBehaviour
         }
     }
 
+        private void DisableFairyMovement()
+    {
+        movementEnabled = false;
+        movementInput = Vector2.zero;
+        isMoving = false;
+
+        if (isSmoothingMovement && !isFalling) // Don't interrupt falling
+        {
+            StopAllCoroutines();
+            isSmoothingMovement = false;
+            SnapToGrid();
+        }
+    }
+
+    private void EnableFairyMovement()
+    {
+        // Only enable movement if we're not falling
+        if (!isFalling)
+        {
+            movementEnabled = true;
+        }
+    }
+
+
+    public void ForceChunkParentingCheck()
+    {
+        CheckChunkParentingStatus();
+    }
+
+
+     private void OnDrawGizmos()
+    {
+        if (isFalling)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, 0.5f);
+            Gizmos.DrawLine(transform.position, fallStartPosition);
+            
+            // Draw fall velocity indicator
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(transform.position, Vector3.down * (currentFallVelocity * 0.1f));
+        }
+    }
     private void UpdateLastDirection(Vector2 direction)
     {
         if (direction.x > 0) lastDirection = "Right";
@@ -513,54 +669,54 @@ public class FeyNewControl : MonoBehaviour
     // }
 
 
-    private void CheckChunkParenting()
-{
-    bool inChunk = transform.parent != null && transform.parent.GetComponent<Chunk>() != null;
+//     private void CheckChunkParenting()
+// {
+//     bool inChunk = transform.parent != null && transform.parent.GetComponent<Chunk>() != null;
 
-    if (inChunk && isFalling)
-    {
-        DisableGravity(); 
-    }
-    else if (!inChunk && !isFalling)
-    {
-        EnableGravity(); 
-    }
+//     // if (inChunk && isFalling)
+//     // {
+//     //     DisableGravity(); 
+//     // }
+//     // else if (!inChunk && !isFalling)
+//     // {
+//     //     EnableGravity(); 
+//     // }
 
    
-    if (ChunkManager.Instance != null)
-    {
-        ChunkManager.Instance.ValidateObjectParenting(transform, "Player");
-    }
-}
+//     if (ChunkManager.Instance != null)
+//     {
+//         ChunkManager.Instance.ValidateObjectParenting(transform, "Player");
+//     }
+// }
 
-private void EnableGravity()
-    {
-        isFalling = true;
-        movementEnabled = false;
+// private void EnableGravity()
+//     {
+//         isFalling = true;
+//         movementEnabled = false;
 
-        if (characterRB != null)
-        {
-            characterRB.gravityScale = normalGravity; 
-            characterRB.velocity = Vector2.zero;
-        }
+//         if (characterRB != null)
+//         {
+//             characterRB.gravityScale = normalGravity; 
+//             characterRB.velocity = Vector2.zero;
+//         }
 
-        if (animator != null)
-        {
-            animator.Play("Falling");
-        }
-    }
+//         if (animator != null)
+//         {
+//             animator.Play("Falling");
+//         }
+//     }
 
-private void DisableGravity()
-{
-    isFalling = false;
-    movementEnabled = true;
+// private void DisableGravity()
+// {
+//     isFalling = false;
+//     movementEnabled = true;
 
-    if (characterRB != null)
-    {
-        characterRB.gravityScale = noGravity; 
-        characterRB.velocity = Vector2.zero;
-    }
-}
+//     if (characterRB != null)
+//     {
+//         characterRB.gravityScale = noGravity; 
+//         characterRB.velocity = Vector2.zero;
+//     }
+// }
 
 
 }

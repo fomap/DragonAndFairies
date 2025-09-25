@@ -1,3 +1,5 @@
+using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class TailDirection : MonoBehaviour
@@ -7,17 +9,28 @@ public class TailDirection : MonoBehaviour
     [SerializeField] private Sprite tailLeft;
     [SerializeField] private Sprite tailUp;
     [SerializeField] private Sprite tailDown;
-    
+
     [Header("References")]
-    [SerializeField] private Transform previousSegment; 
+    [SerializeField] private Transform previousSegment;
     [SerializeField] private SpriteRenderer tailRenderer;
-    
+
     private Vector3 lastPosition;
     private string currentDirection = "Down";
+
+    public Direction initialDir;
+    public enum TailDir
+    {
+        Down,
+        Up,
+        Left,
+        Right
+    }
+
 
     private void Start()
     {
         lastPosition = transform.position;
+     //   currentDirection = initialDir;
     }
 
     private void Update()

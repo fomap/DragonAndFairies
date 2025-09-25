@@ -1,14 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
 
+
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerOneMovement : MonoBehaviour
 {
     public static event Action OnDragonMovementStarted;
@@ -27,7 +25,7 @@ public class PlayerOneMovement : MonoBehaviour
     [SerializeField] private List<Vector2> positionHistory = new List<Vector2>();
 
     private PlayerControls playerOneControls;
-    // private Rigidbody2D pointRB;
+   
     private bool isMoving = false;
     private Vector2 targetPos;
     private Vector2 movementInput;
@@ -38,7 +36,7 @@ public class PlayerOneMovement : MonoBehaviour
     private void Awake()
     {
         playerOneControls = new PlayerControls();
-        // pointRB = GetComponent<Rigidbody2D>();
+       
     
         foreach (Transform child in transform)
         {
@@ -62,35 +60,11 @@ public class PlayerOneMovement : MonoBehaviour
         playerOneControls.Player.Dragon.performed -= OnMovementPerformed;
     }
 
-    private void Update()
-    {
-
-        // if (isMoving)
-        // {
-        //     pointRB.position = Vector2.MoveTowards(
-        //         pointRB.position,
-        //         targetPos,
-        //         moveSpeed * Time.deltaTime
-        //     );
-
-        //     if (Vector2.Distance(pointRB.position, targetPos) < snapThreshold)
-        //     {
-        //         pointRB.position = targetPos;
-        //         isMoving = false;
-
-        //         OnDragonMovementCompleted?.Invoke();
-        //     }
-        // }
-
-    }
-
     public void OnMovementPerformed(InputAction.CallbackContext context)
     {
         if (isMoving) return;
 
         movementInput = context.ReadValue<Vector2>();
-        // Vector2 moveDirection = GetPrimaryDirection(movementInput);
-
         if (movementInput != Vector2.zero)
         {
             OnDragonMovementStarted?.Invoke();
@@ -128,7 +102,6 @@ public class PlayerOneMovement : MonoBehaviour
         }
 
         OnMovementAttempted?.Invoke(direction, true);
-
         OnDragonMovementCompleted?.Invoke();
 
         return true;
@@ -136,7 +109,6 @@ public class PlayerOneMovement : MonoBehaviour
 
     private bool WouldIntersectSelf(Vector2 newHeadPosition)
     {
-
         for (int i = 1; i < Chunks.Count; i++)
         {
             if (Vector2.Distance(newHeadPosition, Chunks[i].position) < 0.4f * gridSize)
@@ -146,6 +118,7 @@ public class PlayerOneMovement : MonoBehaviour
         }
         return false;
     }
+    
 }
 
 

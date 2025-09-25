@@ -29,7 +29,7 @@ public class ChunkManager : MonoBehaviour
         // Find all chunks in the scene
         Chunk[] chunks = FindObjectsOfType<Chunk>();
         allChunks.AddRange(chunks);
-        Debug.Log($"Found {allChunks.Count} chunks in scene");
+       // Debug.Log($"Found {allChunks.Count} chunks in scene");
     }
 
     public void RegisterObjectInChunk(Transform obj, Chunk chunk)
@@ -63,7 +63,7 @@ public class ChunkManager : MonoBehaviour
           
             if (!objectToChunkMap.ContainsKey(obj) || objectToChunkMap[obj] != correctChunk)
             {
-                Debug.Log($"Correcting parenting: {obj.name} should be in chunk at {correctChunk.transform.position}");
+              //  Debug.Log($"Correcting parenting: {obj.name} should be in chunk at {correctChunk.transform.position}");
                 
                 if (objectToChunkMap.ContainsKey(obj))
                 {
@@ -78,7 +78,7 @@ public class ChunkManager : MonoBehaviour
         
             if (objectToChunkMap.ContainsKey(obj))
             {
-                Debug.Log($"Correcting parenting: {obj.name} should not be in any chunk");
+                Debug.Log($"Correcting parenting: {obj.name} IS NOT in any chunk");
                 
             
                 Chunk currentChunk = objectToChunkMap[obj];

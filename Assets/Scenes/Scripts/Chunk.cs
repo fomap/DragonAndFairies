@@ -8,9 +8,7 @@ public class Chunk : MonoBehaviour
 
     private void Start()
     {
-        if (ChunkManager.Instance != null)
-        {
-        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -21,6 +19,7 @@ public class Chunk : MonoBehaviour
             if (gameObject.activeInHierarchy)
             {
                 ParentObject(other.transform);
+              //  other.GetComponent<FeyNewControl>()?.DisableGravity();
             }
         }
     }
@@ -29,10 +28,11 @@ public class Chunk : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-           
+
             if (gameObject.activeInHierarchy)
             {
                 UnparentObject(other.transform);
+               // other.GetComponent<FeyNewControl>()?.EnableGravity();
             }
         }
     }

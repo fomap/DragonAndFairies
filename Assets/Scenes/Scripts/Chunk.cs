@@ -1,112 +1,73 @@
+
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Chunk : MonoBehaviour
 {
-    private static readonly HashSet<Transform> childrenInChunks = new HashSet<Transform>();
+    private bool automaticParentingEnabled = true;
 
-    private void Start()
+    public void DisableAutomaticParenting()
     {
-
+        automaticParentingEnabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!automaticParentingEnabled) return;
+        
         if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-
-            if (gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy && ChunkManager.Instance != null)
             {
-                ParentObject(other.transform);
-                //  other.GetComponent<FeyNewControl>()?.DisableGravity();
+                ChunkManager.Instance.ReportTriggerEnter(this, other);
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        if (!automaticParentingEnabled) return;
+        
         if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-
-            if (gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy && ChunkManager.Instance != null)
             {
-                UnparentObject(other.transform);
-                // other.GetComponent<FeyNewControl>()?.EnableGravity();
+                ChunkManager.Instance.ReportTriggerExit(this, other);
             }
         }
     }
 
-
-    public void ForceParentObject(Transform obj)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        StartCoroutine(DelayedParent(obj, true));
+        if (!automaticParentingEnabled) return;
+        
+        if (other.CompareTag("Player") || other.CompareTag("Box"))
+        {
+            if (gameObject.activeInHierarchy && ChunkManager.Instance != null)
+            {
+                // Additional validation for objects that might have been missed
+                if (!ChunkManager.Instance.IsObjectInAnyChunk(other.transform))
+                {
+                    ChunkManager.Instance.ReportTriggerEnter(this, other);
+                }
+            }
+        }
     }
 
-    public void ForceUnparentObject(Transform obj)
+    // Optional: Manual parenting methods for specific cases
+    public void RequestParenting(Transform obj)
     {
-        StartCoroutine(DelayedParent(obj, false));
-    }
-
-    private void ParentObject(Transform obj)
-    {
-        if (obj == null || childrenInChunks.Contains(obj)) return;
-
-        obj.SetParent(transform);
-        childrenInChunks.Add(obj);
-
-
         if (ChunkManager.Instance != null)
         {
-            ChunkManager.Instance.RegisterObjectInChunk(obj, this);
+            ChunkManager.Instance.ForceParentObject(obj, this);
         }
     }
 
-    private void UnparentObject(Transform obj)
+    public void RequestUnparenting(Transform obj)
     {
-        if (obj != null && childrenInChunks.Contains(obj))
+        if (ChunkManager.Instance != null)
         {
-            obj.SetParent(null);
-            childrenInChunks.Remove(obj);
-
-            if (ChunkManager.Instance != null)
-            {
-                ChunkManager.Instance.UnregisterObjectFromChunk(obj);
-            }
+            ChunkManager.Instance.ForceUnparentObject(obj);
         }
     }
-
-    private IEnumerator DelayedParent(Transform obj, bool parentToChunk)
-    {
-
-        yield return null;
-
-        if (obj == null) yield break;
-
-        if (parentToChunk)
-        {
-            ParentObject(obj);
-        }
-        else
-        {
-            UnparentObject(obj);
-        }
-    }
-
-    public static bool IsObjectInAnyChunk(Transform obj)
-    {
-        return childrenInChunks.Contains(obj);
-    }
-    
-    public bool IsPositionInChunk(Vector3 position)
-    {
-        Collider2D chunkCollider = GetComponent<Collider2D>();
-        if (chunkCollider != null)
-        {
-            return chunkCollider.OverlapPoint(position);
-        }
-        return false;
-    }
-
 }
-

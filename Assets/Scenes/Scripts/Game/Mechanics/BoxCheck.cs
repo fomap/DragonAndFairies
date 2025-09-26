@@ -4,36 +4,36 @@ using UnityEngine;
 
 public class BoxCheck : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
+    // private SpriteRenderer spriteRenderer;
 
 
-    private void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+    // private void Awake()
+    // {
+    //     spriteRenderer = GetComponent<SpriteRenderer>();
+    // }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Point"))
-        {
-            //  spriteRenderer.color = Color.green;
-            FairyMovement.currentBoxes++;
-            Debug.Log(FairyMovement.currentBoxes);
-        }
+    // private void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Point"))
+    //     {
+    //         //  spriteRenderer.color = Color.green;
+    //         FairyMovement.currentBoxes++;
+    //         Debug.Log(FairyMovement.currentBoxes);
+    //     }
 
-    }
+    // }
 
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Point"))
-        {
-            // spriteRenderer.color = Color.red;
-            FairyMovement.currentBoxes--;
-            Debug.Log(FairyMovement.currentBoxes);
-        }
+    // private void OnTriggerExit2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Point"))
+    //     {
+    //         // spriteRenderer.color = Color.red;
+    //         FairyMovement.currentBoxes--;
+    //         Debug.Log(FairyMovement.currentBoxes);
+    //     }
 
-    }
+    // }
 
 
 }

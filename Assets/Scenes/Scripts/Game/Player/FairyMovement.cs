@@ -73,6 +73,7 @@ public class FairyMovement : MonoBehaviour
     {
         if (currentBoxes >= minBoxesNumber)
         {
+         //   Debug.Log("fey achieved  { currentBoxes} + )
             CameraZoomOut?.Invoke();
             SceneManager.LoadScene(nextLevel);
         }

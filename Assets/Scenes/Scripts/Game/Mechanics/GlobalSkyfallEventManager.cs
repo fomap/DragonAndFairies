@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class GlobalSkyfallEventManager : MonoBehaviour
 {
-    public static GlobalSkyfallEventManager Instance;
+    public static GlobalSkyfallEventManager Instance { get; private set; }
 
     // Global events
     public static event Action OnAnyObjectStartFalling;
     public static event Action OnAnyObjectStopFalling;
+
+    
     public static event Action OnFeyStartMoving;
     public static event Action OnFeyStopMoving;
 

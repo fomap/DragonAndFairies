@@ -39,7 +39,8 @@ public class Skyfall : MonoBehaviour
 
     private void CheckForBoundary()
     {
-        if (!isFalling || movementLocked) return;
+       // if (!isFalling || movementLocked) return;
+        if (!isFalling) return;
 
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
@@ -78,7 +79,8 @@ public class Skyfall : MonoBehaviour
 
     private void CheckChunkParentingStatus()
     {
-        if (movementLocked || isInAbyss) return;
+        //if (movementLocked || isInAbyss) return;
+        if (isInAbyss) return;
 
         bool isCurrentlyParented = IsParentedToChunk();
 
@@ -94,6 +96,8 @@ public class Skyfall : MonoBehaviour
         wasParentedLastFrame = isCurrentlyParented;
     }
 
+
+ 
     private void StartFalling()
     {
         if (isFalling || isInAbyss) return;
@@ -105,6 +109,7 @@ public class Skyfall : MonoBehaviour
         OnStartFalling?.Invoke();
 
         Debug.Log($" ok imagine {gameObject.name} is falling ");
+        //yield return new WaitForEndOfFrame();
 
         GlobalSkyfallEventManager.Instance?.NotifyStartFalling();
 
@@ -117,16 +122,22 @@ public class Skyfall : MonoBehaviour
 
         isFalling = false;
         currentFallVelocity = 0f;
+        
         SnapToGrid();
+
 
         OnStopFalling?.Invoke();
         GlobalSkyfallEventManager.Instance?.NotifyStopFalling();
-
     }
+
+
+
+
 
     private void HandleFalling()
     {
-        if (!isFalling || movementLocked || isInAbyss) return;
+        //if (!isFalling || movementLocked || isInAbyss) return;
+        if (!isFalling || isInAbyss) return;
 
         currentFallVelocity += fallAcceleration * Time.deltaTime;
         currentFallVelocity = Mathf.Min(currentFallVelocity, maxFallSpeed);
@@ -145,10 +156,12 @@ public class Skyfall : MonoBehaviour
 
             if (IsParentedToChunk())
             {
+
                 StopFalling();
             }
         }
     }
+
 
     public bool IsParentedToChunk()
     {
@@ -163,16 +176,29 @@ public class Skyfall : MonoBehaviour
 
     private void SnapToGrid()
     {
-        transform.position = GetGridAlignedPosition(transform.position);
+        Vector3 gridPosition = GetGridAlignedPosition(transform.position);
+
+
+        if (objectTag == "Box")
+        {
+            gridPosition += Vector3.down * gridSize;
+             //transform.position = FindNonOverlappingPosition(gridPosition);
+        }
+        
+        transform.position = gridPosition;
+        Debug.Log($"{gameObject.name} snapped to: {transform.position}");
     }
 
     private Vector3 GetGridAlignedPosition(Vector3 position)
     {
+
         return new Vector3(
-            Mathf.Round(position.x / gridSize) * gridSize,
-            Mathf.Round(position.y / gridSize) * gridSize,
-            position.z
+        Mathf.Round(position.x / gridSize) * gridSize,
+        Mathf.Round(position.y / gridSize) * gridSize,
+        position.z
         );
+
+
     }
 
 
@@ -203,4 +229,6 @@ public class Skyfall : MonoBehaviour
         }
     }
 }
+
+
 

@@ -29,9 +29,10 @@ public class BoxCheck : MonoBehaviour
     {
         if (other.CompareTag("Point"))
         {
-           // spriteRenderer.color = Color.red;
-              FeyNewControl.currentBoxes--;
-            Debug.Log(FeyNewControl.currentBoxes);
+            // spriteRenderer.color = Color.red;
+            FeyNewControl.currentBoxes--;
+            //Debug.Log("Fae now has " + FeyNewControl.currentBoxes + " zharopuh collected");
+            
         }
 
     }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelRestarter : MonoBehaviour
 {
-     private string currLvl;
+    private string currLvl;
 
     private void Start()
     {

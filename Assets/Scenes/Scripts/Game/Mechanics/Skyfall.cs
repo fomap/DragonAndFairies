@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Skyfall : MonoBehaviour
 {
@@ -144,13 +145,19 @@ public class Skyfall : MonoBehaviour
 
     private IEnumerator DestroyAfterAbyss()
     {
-         yield return new WaitForSeconds(abyssDestroyDelay);
+        yield return new WaitForSeconds(abyssDestroyDelay);
 
         Debug.Log($"Destroyed {gameObject.name} that fell into abyss");
 
         isFalling = false;
-        GlobalSkyfallEventManager.Instance?.NotifyStopFalling(); 
+        GlobalSkyfallEventManager.Instance?.NotifyStopFalling();
         Destroy(gameObject);
+
+
+        string currLvl;
+        Scene currScene = SceneManager.GetActiveScene();
+        currLvl = currScene.name;  
+        SceneManager.LoadScene(currLvl); //yeah bad i now fuck off i have hw to do
     }
 
     private void CheckChunkParentingStatus()

@@ -31,6 +31,7 @@ public class FeyNewControl : MonoBehaviour
     private Vector3 targetPosition;
     private bool isSmoothingMovement = false;
     private bool isMoving = false;
+    private bool isPushing = false;
     private bool movementEnabled = true;
     public static int currentBoxes;
 
@@ -239,6 +240,7 @@ public class FeyNewControl : MonoBehaviour
     {
         isSmoothingMovement = true;
         isMoving = true;
+        isPushing = true;
         StartMovement();
 
         Skyfall boxSkyfall = box.GetComponent<Skyfall>();
@@ -311,6 +313,7 @@ public class FeyNewControl : MonoBehaviour
 
         isSmoothingMovement = false;
         isMoving = false;
+        isPushing = false; 
         StopMovement();
 
         // Continue movement if input is still active
@@ -417,18 +420,19 @@ public class FeyNewControl : MonoBehaviour
     #region Animation
     private void HandleAnimations()
     {
-        if (animator == null) return;
-
-
         if (skyfallObject.IsFalling() || skyfallObject.IsInAbyss())
-        {
-            animator.Play("Falling");
-        }
-        else
-        {
-            string animationName = isMoving ? "Walking" : "Idle";
-            animator.Play(animationName + lastDirection);
-        }
+    {
+        animator.Play("Falling");
+    }
+    else if (isPushing)
+    {
+        animator.Play("Pushing" + lastDirection);
+    }
+    else
+    {
+        string animationName = isMoving ? "Walking" : "Idle";
+        animator.Play(animationName + lastDirection);
+    }
     }
 
     private void UpdateLastDirection(Vector2 direction)

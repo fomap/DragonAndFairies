@@ -1,7 +1,7 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using UnityEngine.InputSystem;
 
 public class ChangeSprite : MonoBehaviour
@@ -9,26 +9,23 @@ public class ChangeSprite : MonoBehaviour
     [Header("Sprite Settings")]
     [SerializeField] private Sprite rightSprite;
     [SerializeField] private Sprite leftSprite;
-    [SerializeField] private Sprite upSprite;
-    [SerializeField] private Sprite downSprite;
-
-  
+    [SerializeField] private Sprite upLeftSprite;
+    [SerializeField] private Sprite upRightSprite;
+    [SerializeField] private Sprite downLeftSprite;
+    [SerializeField] private Sprite downRightSprite;
 
     private PlayerControls playerControls;
     private Vector2 movementInput;
-    private string lastDirection = "Down";
+    private string currentDirection = "Down";
+    private string previousMoveDirection = "Left"; 
     private SpriteRenderer spriteRenderer;
-   [SerializeField] private PlayerOneMovement snakeMovement; 
+    [SerializeField] private PlayerOneMovement snakeMovement; 
 
     private void Awake()
     {
-
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-        
-
- 
     private void OnEnable()
     {
         snakeMovement.OnMovementAttempted += HandleMovementAttempt;
@@ -43,45 +40,50 @@ public class ChangeSprite : MonoBehaviour
     {
         if (success)
         {
-            UpdateLastDirection(direction);
-            ChangeSnakeSprite(lastDirection);
-        }
-       
-    }
-
-    private void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        movementInput = context.ReadValue<Vector2>();
-        Vector2 moveDirection = GetPrimaryDirection(movementInput);
-
-        if (moveDirection != Vector2.zero)
-        {
-            UpdateLastDirection(moveDirection);
-            ChangeSnakeSprite(lastDirection);
+            string previousDirection = currentDirection;
+            UpdateCurrentDirection(direction);
+            ChangeSnakeSprite(currentDirection, previousDirection);
+            previousMoveDirection = currentDirection;
         }
     }
 
-    private void ChangeSnakeSprite(string direction)
+    private void UpdateCurrentDirection(Vector2 direction)
     {
-        switch (direction)
+        if (direction.x > 0) 
+            currentDirection = "Right";
+        else if (direction.x < 0) 
+            currentDirection = "Left";
+        else if (direction.y > 0) 
+            currentDirection = "Up";
+        else if (direction.y < 0) 
+            currentDirection = "Down";
+    }
+
+    private void ChangeSnakeSprite(string currentDirection, string previousDirection)
+    {
+        switch (currentDirection)
         {
             case "Right":
                 spriteRenderer.sprite = rightSprite;
-                //spriteRenderer.flipX = false; // Reset flip if needed
                 break;
             case "Left":
-                spriteRenderer.sprite = leftSprite; // Use same sprite as right
-               // spriteRenderer.flipX = true; // Flip horizontally
+                spriteRenderer.sprite = leftSprite;
                 break;
             case "Up":
-                spriteRenderer.sprite = upSprite;
-              //  spriteRenderer.flipX = false; 
+                if (previousDirection == "Left")
+                    spriteRenderer.sprite = upLeftSprite;
+                else if (previousDirection == "Right")
+                    spriteRenderer.sprite = upRightSprite;
                 break;
             case "Down":
-                spriteRenderer.sprite = downSprite;
-               // spriteRenderer.flipX = false; 
+                if (previousDirection == "Left")
+                    spriteRenderer.sprite = downLeftSprite;
+                else if (previousDirection == "Right")
+                    spriteRenderer.sprite = downRightSprite;
                 break;
         }
+        
+       //Debug.Log($"Current: {currentDirection}, Previous: {previousDirection}, Sprite: {spriteRenderer.sprite.name}");
     }
 
     private Vector2 GetPrimaryDirection(Vector2 input)
@@ -95,13 +97,5 @@ public class ChangeSprite : MonoBehaviour
             return new Vector2(0, Mathf.Sign(input.y));
         }
         return Vector2.zero;
-    }
-    
-    private void UpdateLastDirection(Vector2 direction)
-    {
-        if (direction.x > 0) lastDirection = "Right";
-        else if (direction.x < 0) lastDirection = "Left";
-        else if (direction.y > 0) lastDirection = "Up";
-        else if (direction.y < 0) lastDirection = "Down";
     }
 }

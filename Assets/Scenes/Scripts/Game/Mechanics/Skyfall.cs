@@ -13,6 +13,7 @@ public class Skyfall : MonoBehaviour
 
     [Header("Abyss Settings")]
     [SerializeField] private LayerMask boundaryLayer;
+    [SerializeField] private LayerMask wallLayer ;
     [SerializeField] private float boundaryCheckDistance = 0.5f;
     [SerializeField] private float abyssDestroyDelay = 2f;
 
@@ -27,7 +28,7 @@ public class Skyfall : MonoBehaviour
     private bool wasParentedLastFrame = true;
     private bool movementLocked = false;
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!isInAbyss)
         {
@@ -37,23 +38,98 @@ public class Skyfall : MonoBehaviour
         }
     }
 
+    // private void CheckForBoundary()
+    // {
+    //     if (!isFalling) return;
+
+
+    //     int boundaryOnlyLayer = 3; 
+
+    //     RaycastHit2D hit = Physics2D.Raycast(
+    //         transform.position,
+    //         Vector2.down,
+    //         boundaryCheckDistance,
+    //         boundaryOnlyLayer 
+    //     );
+
+    //     Debug.Log($"{gameObject.name}: Boundary check - Hit: {hit.collider?.name ?? "None"}");
+
+    //     if (hit.collider == null && !isInAbyss)
+    //     {
+    //         Debug.Log($"{gameObject.name}: No boundary below, entering abyss");
+    //         EnterAbyss();
+    //     }
+    // }
+
+
     private void CheckForBoundary()
+{
+    if (!isFalling) return;
+
+    // Ray should detect both walls + boundaries
+    int groundMask = wallLayer | boundaryLayer;
+
+    RaycastHit2D hit = Physics2D.Raycast(
+        transform.position,
+        Vector2.down,
+        boundaryCheckDistance,
+        groundMask
+    );
+
+    if (hit.collider == null)
     {
-       // if (!isFalling || movementLocked) return;
-        if (!isFalling) return;
-
-        RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
-            Vector2.down,
-            boundaryCheckDistance,
-            boundaryLayer
-        );
-
-        if (hit.collider == null && !isInAbyss)
+        // Nothing at all beneath Fey → abyss
+        if (!isInAbyss)
         {
+            Debug.Log($"{gameObject.name}: No ground detected, entering abyss");
             EnterAbyss();
         }
+        return;
     }
+
+    int hitLayer = hit.collider.gameObject.layer;
+
+    if (((1 << hitLayer) & wallLayer) != 0)
+    {
+        Debug.Log($"{gameObject.name}: Wall detected: {hit.collider.name}");
+        if (!isInAbyss) EnterAbyss();
+    }
+    else if (((1 << hitLayer) & boundaryLayer) != 0)
+    {
+        Debug.Log($"{gameObject.name}: Boundary detected: {hit.collider.name}");
+    }
+}
+
+    // private void CheckForBoundary()
+    // {
+    //     // if (!isFalling || movementLocked) return;
+    //     if (!isFalling)
+    //     {
+    //         Debug.Log($"{gameObject.name}: Not falling, skipping boundary check");
+    //         return;
+
+    //     }
+
+    //     RaycastHit2D hit = Physics2D.Raycast(
+    //         transform.position,
+    //         Vector2.down,
+    //         boundaryCheckDistance,
+    //         boundaryLayer
+    //     );
+
+    //     Debug.Log($"{gameObject.name}: Boundary check - Position: {transform.position}, Hit: {hit.collider?.name ?? "None"}, Distance: {hit.distance}");
+
+
+    //     if (hit.collider == null && !isInAbyss)
+    //     {
+    //         Debug.Log($"{gameObject.name}: No boundary below, entering abyss");
+    //         EnterAbyss();
+    //     }
+    //     else if (!isInAbyss)
+    //     {
+    //         Debug.Log($"{gameObject.name}: Boundary detected: {hit.collider.name} at position {hit.collider.transform.position}");
+    //     }
+    // }
 
     private void EnterAbyss()
     {

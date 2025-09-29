@@ -41,7 +41,7 @@ public class ChunkManager : MonoBehaviour
     {
         Chunk[] chunks = FindObjectsOfType<Chunk>();
         allChunks.AddRange(chunks);
-        
+
         foreach (Chunk chunk in allChunks)
         {
             chunk.DisableAutomaticParenting();
@@ -51,7 +51,7 @@ public class ChunkManager : MonoBehaviour
     private void ProcessParentingQueue()
     {
         if (isProcessingQueue || parentingQueue.Count == 0) return;
-        
+
         isProcessingQueue = true;
         while (parentingQueue.Count > 0)
         {
@@ -180,11 +180,13 @@ public class ChunkManager : MonoBehaviour
     }
 
     // Public API
-    public void ForceParentObject(Transform obj, Chunk chunk) => 
+    public void ForceParentObject(Transform obj, Chunk chunk) =>
         QueueParentingOperation(obj, chunk, OperationType.Parent);
-    public void ForceUnparentObject(Transform obj) => 
+    public void ForceUnparentObject(Transform obj) =>
         QueueParentingOperation(obj, null, OperationType.Unparent);
     public bool IsObjectInAnyChunk(Transform obj) => objectToChunkMap.ContainsKey(obj);
+    
+    
 }
 
 

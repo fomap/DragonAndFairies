@@ -21,22 +21,28 @@ EditorBuildSettings:
     path: Assets/Scenes/Scenes/TitleScreen.unity
     guid: 62533d5e48988174dade52494a8e04b4
   - enabled: 1
-    path: Assets/Scenes/Scenes/lvl0.unity
-    guid: 6d5c612d1dc3ace49aeead00de2b6af4
+    path: Assets/Scenes/Scenes/TileBased/level1.unity
+    guid: ab950ca05b8bf5a4a90c541f606fd7af
   - enabled: 1
-    path: Assets/Scenes/Scenes/lvl1.unity
-    guid: 6ef81beb79922ed4ba28ccfefe32ea5e
+    path: Assets/Scenes/Scenes/TileBased/level2.unity
+    guid: 87e51fc91bb8fe74d81f502781ad7b33
   - enabled: 1
-    path: Assets/Scenes/Scenes/lvl2.unity
-    guid: f7c8eae4bd88a204499c13cba904542b
+    path: Assets/Scenes/Scenes/TileBased/level3.unity
+    guid: 6e0d8aa4e751aaf49b3bb9e5ff1a533e
   - enabled: 1
-    path: Assets/Scenes/Scenes/lvl3.unity
-    guid: 55de577da3212dd43a12b79dabfdbb01
+    path: Assets/Scenes/Scenes/TileBased/level4.unity
+    guid: d72d00b0910f74c4d8d6ab33aae92370
   - enabled: 1
-    path: Assets/Scenes/Scenes/lvl4.unity
-    guid: b81a5d731c91362478d269c98cb7e960
+    path: Assets/Scenes/Scenes/TileBased/level5.unity
+    guid: fdf7cb08361c1e64eb2f28a180f931bb
   - enabled: 1
-    path: Assets/Scenes/Scenes/lvl5.unity
-    guid: d1ff70d26579fb2409e0432b84fbf101
+    path: Assets/Scenes/Scenes/TileBased/level6.unity
+    guid: b2af1c26f80be37429ac5bc1dca4b976
+  - enabled: 1
+    path: Assets/Scenes/Scenes/TileBased/level7.unity
+    guid: 21f84aed877a91342a8ec75ab7fd696d
+  - enabled: 1
+    path: Assets/Scenes/Scenes/TileBased/level8.unity
+    guid: eece813355f753c4da6fe6d840ec91dd
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: dc2aadaffa712d84baafca43fce0ddae, type: 3}

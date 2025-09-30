@@ -19,7 +19,7 @@ public class FeyNewControl : MonoBehaviour
 
     [Header("Win Settings")]
     [SerializeField] public int minBoxesNumber = 1;
-    [SerializeField] private string nextLevel = "";
+   // [SerializeField] private string nextLevel = "";
 
     // Components
     private Skyfall skyfallObject;

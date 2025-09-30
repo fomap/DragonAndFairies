@@ -143,7 +143,6 @@ MonoBehaviour:
   snapThreshold: 0.01
   animator: {fileID: 0}
   minBoxesNumber: 1
-  nextLevel: lvl2
 --- !u!61 &1098857790103853548
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -187,7 +186,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
 --- !u!50 &3546531579768699929
 Rigidbody2D:

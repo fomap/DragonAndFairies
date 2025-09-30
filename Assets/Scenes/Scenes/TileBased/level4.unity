@@ -4719,7 +4719,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &720882326
 Transform:
   m_ObjectHideFlags: 0
@@ -7611,7 +7611,6 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 256
-  boundaryCheckDistance: 10
   abyssDestroyDelay: 3
 --- !u!95 &1196626657 stripped
 Animator:
@@ -8113,7 +8112,6 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 256
-  boundaryCheckDistance: 10
   abyssDestroyDelay: 3
 --- !u!1001 &1290326088
 PrefabInstance:

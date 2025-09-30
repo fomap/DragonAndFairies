@@ -15,7 +15,7 @@ public class Skyfall : MonoBehaviour
     [Header("Abyss Settings")]
     [SerializeField] private LayerMask boundaryLayer;
     [SerializeField] private LayerMask wallLayer ;
-    [SerializeField] private float boundaryCheckDistance = 0.5f;
+   // [SerializeField] private float boundaryCheckDistance = 0.5f;
     [SerializeField] private float abyssDestroyDelay = 2f;
 
     // Events
@@ -73,7 +73,8 @@ public class Skyfall : MonoBehaviour
     RaycastHit2D hit = Physics2D.Raycast(
         transform.position,
         Vector2.down,
-        boundaryCheckDistance,
+        float.NegativeInfinity,
+        //boundaryCheckDistance,
         groundMask
     );
 
@@ -302,7 +303,7 @@ public class Skyfall : MonoBehaviour
             Gizmos.DrawRay(transform.position, Vector3.down * (currentFallVelocity * 0.1f));
 
             Gizmos.color = isInAbyss ? Color.red : Color.yellow;
-            Gizmos.DrawRay(transform.position, Vector3.down * boundaryCheckDistance);
+            Gizmos.DrawRay(transform.position, Vector3.negativeInfinity);
         }
 
         if (isInAbyss)

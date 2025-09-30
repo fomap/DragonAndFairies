@@ -175,9 +175,12 @@ public class FeyNewControl : MonoBehaviour
     {
         if (currentBoxes >= minBoxesNumber)
         {
-            Debug.Log(" minBoxesNumber is achieved");
-        //    CameraZoomOut?.Invoke();
-            SceneManager.LoadScene(nextLevel);
+            Debug.Log("minBoxesNumber is achieved");
+            //    CameraZoomOut?.Invoke();
+
+
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(sceneIndex+1);
         }
     }
 

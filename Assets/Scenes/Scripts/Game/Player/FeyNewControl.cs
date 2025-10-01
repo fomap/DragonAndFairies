@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 public class FeyNewControl : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float gridSize = 1f;
+    private float gridSize = 1f;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask boxLayer;
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float boxMoveSpeed = 8f;
-    [SerializeField] private float snapThreshold = 0.01f;
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float boxMoveSpeed = 2f;
+    private float snapThreshold = 0.01f;
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
@@ -21,7 +21,9 @@ public class FeyNewControl : MonoBehaviour
 
 
     [SerializeField] public int minBoxesNumber = 1;
-   // [SerializeField] private string nextLevel = "";
+    // [SerializeField] private string nextLevel = "";
+   
+    private AsyncOperation asyncLoadOperation;
 
     // Components
     private Skyfall skyfallObject;
@@ -181,17 +183,28 @@ public class FeyNewControl : MonoBehaviour
 
     private void CheckWin()
     {
-        if (currentBoxes >= minBoxesNumber)
+        if (currentBoxes == minBoxesNumber)
         {
-            Debug.Log("minBoxesNumber is achieved");
-            //    CameraZoomOut?.Invoke();
-
-
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            Debug.Log(sceneIndex+1);
-            SceneManager.LoadScene(sceneIndex+1);
+            if (Dialogue.Instance != null && Dialogue.Instance.IsDialogueActive)
+            {
+                Dialogue.Instance.QueueLevelLoad(); // wait for dialogue to finish
+            }
+            else
+            {
+                // load immediately if no dialogue is showing
+                SceneManager.LoadScene(sceneIndex + 1);
+            }
+
+
+        
+
         }
     }
+
+
+
+
 
     private void TryMove(Vector2 direction)
     {
@@ -327,6 +340,8 @@ public class FeyNewControl : MonoBehaviour
         isMoving = false;
         isPushing = false; 
         StopMovement();
+
+        GlobalSkyfallEventManager.Instance?.IncrementBoxMoveCount();
 
         // Continue movement if input is still active
         if (movementEnabled && !skyfallObject.IsFalling() && movementInput != Vector2.zero)

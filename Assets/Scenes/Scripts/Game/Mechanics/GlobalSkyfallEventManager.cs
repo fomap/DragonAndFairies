@@ -18,7 +18,10 @@ public class GlobalSkyfallEventManager : MonoBehaviour
     private int currentlyFallingObjects = 0;
     private bool isGamePaused = false;
 
-    [SerializeField] private PlayerOneMovement dragonController;
+
+    public static Action<int> OnBoxMoved;
+    public int BoxMoveCount { get; private set; }
+
 
     private void Awake()
     {
@@ -26,9 +29,10 @@ public class GlobalSkyfallEventManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            BoxMoveCount = 0;
             Debug.Log("GlobalSkyfallEventManager initialized");
         }
-        else
+        else if (Instance != this)
         {
             Debug.LogWarning("Duplicate GlobalSkyfallEventManager destroyed");
             Destroy(gameObject);
@@ -55,16 +59,16 @@ public class GlobalSkyfallEventManager : MonoBehaviour
         }
     }
 
-    public void NotifyFeyStartMoving() 
-    { 
-        if (!isGamePaused) OnFeyStartMoving?.Invoke(); 
+    public void NotifyFeyStartMoving()
+    {
+        if (!isGamePaused) OnFeyStartMoving?.Invoke();
     }
-    
-    public void NotifyFeyStopMoving() 
-    { 
-        if (!isGamePaused) OnFeyStopMoving?.Invoke(); 
+
+    public void NotifyFeyStopMoving()
+    {
+        if (!isGamePaused) OnFeyStopMoving?.Invoke();
     }
-     public static bool IsGamePaused => Instance != null && Instance.isGamePaused;
+    public static bool IsGamePaused => Instance != null && Instance.isGamePaused;
 
     public void TogglePause()
     {
@@ -73,27 +77,35 @@ public class GlobalSkyfallEventManager : MonoBehaviour
         else
             PauseGame();
     }
-    
+
     public void PauseGame()
     {
         if (isGamePaused) return;
-        
+
         isGamePaused = true;
         Time.timeScale = 0f;
         OnGamePaused?.Invoke();
-        
+
         Debug.Log("Game Paused");
     }
 
     public void ResumeGame()
     {
         if (!isGamePaused) return;
-        
+
         isGamePaused = false;
         Time.timeScale = 1f;
         OnGameResumed?.Invoke();
-        
+
         Debug.Log("Game Resumed");
+    }
+
+
+    public void IncrementBoxMoveCount()
+    {
+        BoxMoveCount++;
+        Debug.Log($"Box move count: {BoxMoveCount}");
+        OnBoxMoved?.Invoke(BoxMoveCount);
     }
 
 }

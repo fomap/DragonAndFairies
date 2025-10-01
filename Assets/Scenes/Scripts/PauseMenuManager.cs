@@ -22,15 +22,11 @@ public class PauseMenuManager : MonoBehaviour
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-
         GlobalSkyfallEventManager.Instance?.PauseGame();
     }
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-
         GlobalSkyfallEventManager.Instance?.ResumeGame();
     }
 

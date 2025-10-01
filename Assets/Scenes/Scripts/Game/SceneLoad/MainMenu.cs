@@ -8,7 +8,9 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     public void Play()
     {
-        SceneManager.LoadScene("lvl0");
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        Debug.Log(sceneIndex+1);
+        SceneManager.LoadScene(sceneIndex+1);
     }
 
     // Update is called once per frame

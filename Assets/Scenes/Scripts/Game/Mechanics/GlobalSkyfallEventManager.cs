@@ -8,15 +8,17 @@ public class GlobalSkyfallEventManager : MonoBehaviour
     // Global events
     public static event Action OnAnyObjectStartFalling;
     public static event Action OnAnyObjectStopFalling;
-
-    
     public static event Action OnFeyStartMoving;
     public static event Action OnFeyStopMoving;
 
+    // New pause events
+    public static event Action OnGamePaused;
+    public static event Action OnGameResumed;
+
     private int currentlyFallingObjects = 0;
+    private bool isGamePaused = false;
 
-
-    [SerializeField] private PlayerOneMovement dragonController; 
+    [SerializeField] private PlayerOneMovement dragonController;
 
     private void Awake()
     {
@@ -35,6 +37,7 @@ public class GlobalSkyfallEventManager : MonoBehaviour
 
     public void NotifyStartFalling()
     {
+        if (isGamePaused) return;
         currentlyFallingObjects++;
         if (currentlyFallingObjects == 1)
         {
@@ -44,6 +47,7 @@ public class GlobalSkyfallEventManager : MonoBehaviour
 
     public void NotifyStopFalling()
     {
+        if (isGamePaused) return;
         currentlyFallingObjects = Mathf.Max(0, currentlyFallingObjects - 1);
         if (currentlyFallingObjects == 0)
         {
@@ -51,10 +55,46 @@ public class GlobalSkyfallEventManager : MonoBehaviour
         }
     }
 
-    public void NotifyFeyStartMoving() => OnFeyStartMoving?.Invoke();
-    public void NotifyFeyStopMoving() => OnFeyStopMoving?.Invoke();
+    public void NotifyFeyStartMoving() 
+    { 
+        if (!isGamePaused) OnFeyStartMoving?.Invoke(); 
+    }
     
+    public void NotifyFeyStopMoving() 
+    { 
+        if (!isGamePaused) OnFeyStopMoving?.Invoke(); 
+    }
+     public static bool IsGamePaused => Instance != null && Instance.isGamePaused;
 
+    public void TogglePause()
+    {
+        if (isGamePaused)
+            ResumeGame();
+        else
+            PauseGame();
+    }
+    
+    public void PauseGame()
+    {
+        if (isGamePaused) return;
+        
+        isGamePaused = true;
+        Time.timeScale = 0f;
+        OnGamePaused?.Invoke();
+        
+        Debug.Log("Game Paused");
+    }
+
+    public void ResumeGame()
+    {
+        if (!isGamePaused) return;
+        
+        isGamePaused = false;
+        Time.timeScale = 1f;
+        OnGameResumed?.Invoke();
+        
+        Debug.Log("Game Resumed");
+    }
 
 }
 

@@ -64,6 +64,9 @@ public class PlayerOneMovement : MonoBehaviour
 
         GlobalSkyfallEventManager.OnFeyStartMoving += DisableDragonMovement;
         GlobalSkyfallEventManager.OnFeyStopMoving += EnableDragonMovement;
+
+        GlobalSkyfallEventManager.OnGamePaused += DisableDragonMovement;
+        GlobalSkyfallEventManager.OnGameResumed += EnableDragonMovement;    
     }
 
     private void UnsubscribeFromEvents()
@@ -73,6 +76,9 @@ public class PlayerOneMovement : MonoBehaviour
 
         GlobalSkyfallEventManager.OnFeyStartMoving -= DisableDragonMovement;
         GlobalSkyfallEventManager.OnFeyStopMoving -= EnableDragonMovement;
+
+        GlobalSkyfallEventManager.OnGamePaused -= DisableDragonMovement;
+        GlobalSkyfallEventManager.OnGameResumed -= EnableDragonMovement;    
     }
 
     public void OnMovementPerformed(InputAction.CallbackContext context)
@@ -147,10 +153,11 @@ public class PlayerOneMovement : MonoBehaviour
 
     }
 
-    private void EnableDragonMovement ()
+    private void EnableDragonMovement()
     {
         
-        dragonMovementEnabled = true;
+        if (!GlobalSkyfallEventManager.IsGamePaused)
+            dragonMovementEnabled = true;
         
     }
 

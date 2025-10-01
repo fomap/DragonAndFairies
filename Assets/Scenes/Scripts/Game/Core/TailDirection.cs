@@ -16,7 +16,7 @@ public class TailDirection : MonoBehaviour
     [SerializeField] private Transform previousSegment;
     [SerializeField] private SpriteRenderer tailRenderer;
 
-    private string currentDirection = "Down";
+    private string currentDirection = "Left";
     private string previousDirection = "Left";
 
     private void Update()

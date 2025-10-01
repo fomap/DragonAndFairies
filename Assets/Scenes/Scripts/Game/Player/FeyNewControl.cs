@@ -18,6 +18,8 @@ public class FeyNewControl : MonoBehaviour
     private string lastDirection = "Down";
 
     [Header("Win Settings")]
+
+
     [SerializeField] public int minBoxesNumber = 1;
    // [SerializeField] private string nextLevel = "";
 
@@ -107,6 +109,9 @@ public class FeyNewControl : MonoBehaviour
 
         GlobalSkyfallEventManager.OnAnyObjectStartFalling += DisableFairyMovement;
         GlobalSkyfallEventManager.OnAnyObjectStopFalling += EnableFairyMovement;
+
+         GlobalSkyfallEventManager.OnGamePaused += DisableFairyMovement;
+        GlobalSkyfallEventManager.OnGameResumed += EnableFairyMovement;  
     }
 
     private void UnsubscribeFromEvents()
@@ -116,6 +121,9 @@ public class FeyNewControl : MonoBehaviour
 
         GlobalSkyfallEventManager.OnAnyObjectStartFalling -= DisableFairyMovement;
         GlobalSkyfallEventManager.OnAnyObjectStopFalling -= EnableFairyMovement;
+
+        GlobalSkyfallEventManager.OnGamePaused -= DisableFairyMovement;
+        GlobalSkyfallEventManager.OnGameResumed -= EnableFairyMovement;    
     }
     #endregion
 
@@ -180,6 +188,7 @@ public class FeyNewControl : MonoBehaviour
 
 
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            Debug.Log(sceneIndex+1);
             SceneManager.LoadScene(sceneIndex+1);
         }
     }
@@ -502,7 +511,7 @@ public class FeyNewControl : MonoBehaviour
 
     private void EnableFairyMovement()
     {
-        if (!skyfallObject.IsFalling())
+        if (!skyfallObject.IsFalling() && !GlobalSkyfallEventManager.IsGamePaused)
         {
             movementEnabled = true;
         }

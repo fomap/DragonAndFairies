@@ -16,7 +16,7 @@ public class ChangeSprite : MonoBehaviour
 
     private PlayerControls playerControls;
     private Vector2 movementInput;
-    private string currentDirection = "Down";
+    private string currentDirection = "Left";
     private string previousMoveDirection = "Left"; 
     private SpriteRenderer spriteRenderer;
     [SerializeField] private PlayerOneMovement snakeMovement; 

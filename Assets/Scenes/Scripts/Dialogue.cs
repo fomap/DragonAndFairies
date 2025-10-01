@@ -1,118 +1,186 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
+
+    public static Dialogue Instance { get; private set; }
+
+    [SerializeField] private DialogueData dialogueData;
+    private AsyncOperation asyncLoadOperation;
+    private bool pendingLevelLoad = false;
+    
+     public bool IsDialogueActive => dialogueCanvas.activeSelf;
+
+
     [Header("UI refs")]
     [SerializeField] private GameObject dialogueCanvas;
-    [SerializeField] private TMP_Text speakerText;
+    [SerializeField] private TMP_Text speakerName;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private Image portraitImage;
 
-    [Header("Dialogue content")]
-    [SerializeField] private string[] speaker;
-    [TextArea]
-    [SerializeField] private string[] dialogueWords;
-    [SerializeField] private Sprite[] portraits;
 
-    
+
     [Header("Typewriter Effect")]
-    [SerializeField] private float typewriterSpeed = 0.05f; 
-    
-    private int currentIndex;
+    [SerializeField] private float typewriterSpeed = 0.05f;
+
     private bool isTyping = false;
     private Coroutine typingCoroutine;
 
-    void Start()
+
+    private void OnEnable()
     {
-        if (HasDialogueContent())
+        GlobalSkyfallEventManager.OnBoxMoved += CheckForDialogueTrigger;
+    }
+
+    private void OnDisable()
+    {
+        GlobalSkyfallEventManager.OnBoxMoved -= CheckForDialogueTrigger;
+    }
+
+
+
+
+    private void Awake()
+    {
+        if (Instance == null)
         {
-            ShowDialogue(0);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(dialogueCanvas);
         }
         else
         {
-            Debug.LogWarning("Dialogue arrays are empty!");
+            Destroy(gameObject);
         }
     }
 
-    void Update()
+
+    private IEnumerator DisplayDialogueGroup(List<DialogueEntry> dialogueEntries)
     {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.RightArrow)) 
+        foreach (DialogueEntry entry in dialogueEntries)
         {
-            if (isTyping)
+            ShowDialogueEntry(entry);
+
+           
+            if (typingCoroutine != null)
             {
-               
-                SkipTyping();
+                StopCoroutine(typingCoroutine);
             }
-            else if (currentIndex < dialogueWords.Length - 1)
+            typingCoroutine = StartCoroutine(TypeText(entry.dialogueText));
+
+         
+            bool lineFinished = false;
+            while (!lineFinished)
             {
-                currentIndex++;
-                ShowDialogue(currentIndex);
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    if (isTyping)
+                    {
+                        
+                        SkipTyping(entry.dialogueText);
+                    }
+                    else
+                    {
+                        lineFinished = true;
+                    }
+                }
+                yield return null;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.LeftArrow)) 
-        {
-            if (isTyping)
-            {
-                
-                SkipTyping();
-            }
-            else if (currentIndex > 0)
-            {
-                currentIndex--;
-                ShowDialogue(currentIndex);
-            }
-        }
+
+        OnDialogueFinished();
     }
 
-    private bool HasDialogueContent()
-    {
-        return speaker.Length > 0 && dialogueWords.Length > 0 && portraits.Length > 0;
-    }
-
-    private void ShowDialogue(int index)
-    {
-        speakerText.text = speaker[index];
-        portraitImage.sprite = portraits[index];
-        currentIndex = index;
-        
-        // typewriter effect
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-        }
-        typingCoroutine = StartCoroutine(TypeText(dialogueWords[index]));
-    }
 
     private IEnumerator TypeText(string text)
     {
         isTyping = true;
         dialogueText.text = "";
-        
+
         foreach (char letter in text.ToCharArray())
         {
             dialogueText.text += letter;
-            yield return new WaitForSeconds(typewriterSpeed);
+            yield return new WaitForSecondsRealtime(typewriterSpeed);
         }
-        
+
         isTyping = false;
     }
 
-    private void SkipTyping()
+    private void SkipTyping(string fullText)
     {
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
         }
-        dialogueText.text = dialogueWords[currentIndex];
+        dialogueText.text = fullText;
         isTyping = false;
     }
+    private void ShowDialogueEntry(DialogueEntry entry)
+    {
+        speakerName.text = entry.speakerName;
+        dialogueText.text = entry.dialogueText;
+        portraitImage.sprite = entry.portrait;
 
-    private void EndDialogue()
+        dialogueCanvas.SetActive(true);
+        GlobalSkyfallEventManager.Instance?.PauseGame();
+    }
+
+
+    public void OnDialogueFinished()
     {
         dialogueCanvas.SetActive(false);
+        
+        GlobalSkyfallEventManager.Instance?.ResumeGame();
+        
+        
+        if (pendingLevelLoad)
+        {
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            if (sceneIndex + 1 < SceneManager.sceneCountInBuildSettings)
+            {
+                SceneManager.LoadScene(sceneIndex + 1);
+            }
+            else
+            {
+                Debug.Log("No more scenes to load.");
+            }
+            pendingLevelLoad = false;
+        }
+
+
     }
+
+    public void QueueLevelLoad()
+    {
+        pendingLevelLoad = true;
+    }
+
+
+
+    private void CheckForDialogueTrigger(int currentCount)
+    {
+        Debug.Log($"CheckForDialogueTrigger called with count {currentCount}");
+
+        DialogueGroup targetGroup = dialogueData.dialogueGroups
+            .Find(group => group.triggerAtMoveCount == currentCount);
+
+        if (targetGroup != null)
+        {
+            Debug.Log($"Found dialogue group for count {currentCount}");
+            StartCoroutine(DisplayDialogueGroup(targetGroup.dialogueEntries));
+        }
+        else
+        {
+            Debug.Log("No dialogue group found for this count");
+        }
+    }
+
+
+
 }

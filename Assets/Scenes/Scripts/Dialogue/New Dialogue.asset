@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 251e7a650bbcb96489808e8ce2f9857d, type: 3}
+  m_Name: New Dialogue
+  m_EditorClassIdentifier: 
+  dialogueGroups:
+  - triggerAtMoveCount: 2
+    dialogueEntries:
+    - speakerName: "\u0424\u0435\u0439"
+      dialogueText: "\u0431\u043B\u044F\u0442\u044C \u0441\u0443\u043A\u0430 \u0442\u044F\u0436\u0435\u043B\u043E"
+      portrait: {fileID: 21300000, guid: b7bb80ac24694e742a1902177d74b61d, type: 3}
+    - speakerName: "\u0414\u0440\u0430\u043A\u043E\u043D"
+      dialogueText: "\u043D\u0443 \u0431\u043B\u044F \u043F\u0436"
+      portrait: {fileID: 21300000, guid: ec86d7235133ae841a8c4f88f8393f4e, type: 3}
+  - triggerAtMoveCount: 5
+    dialogueEntries:
+    - speakerName: "\u0424\u0435\u0439"
+      dialogueText: "\u0437\u0430\u0435\u0431\u0430\u043B \u043D\u0430\u0445\u0443\u0439"
+      portrait: {fileID: 21300000, guid: b7bb80ac24694e742a1902177d74b61d, type: 3}
+  - triggerAtMoveCount: 8
+    dialogueEntries:
+    - speakerName: "\u0424\u0435\u0439"
+      dialogueText: "\u043F\u0438\u0437\u0434\u0430 \u0440\u0430\u0431\u043E\u0442\u0430"
+      portrait: {fileID: 21300000, guid: b7bb80ac24694e742a1902177d74b61d, type: 3}
+    - speakerName: "\u0414\u0440\u0430\u043A\u043E\u043D"
+      dialogueText: "\u043D\u0443 \u0434\u0430 \u043D\u0443 \u0434\u0430"
+      portrait: {fileID: 21300000, guid: ec86d7235133ae841a8c4f88f8393f4e, type: 3}
+  - triggerAtMoveCount: 15
+    dialogueEntries:
+    - speakerName: "\u0424\u0435\u0439"
+      dialogueText: kfd;lkdflkgjkfsdg
+      portrait: {fileID: 21300000, guid: b7bb80ac24694e742a1902177d74b61d, type: 3}
+    - speakerName: "\u0414\u0440\u0430\u043A\u043E\u043D"
+      dialogueText: asdasdasdasdasd
+      portrait: {fileID: 21300000, guid: ec86d7235133ae841a8c4f88f8393f4e, type: 3}
+  - triggerAtMoveCount: 20
+    dialogueEntries:
+    - speakerName: "\u0424\u0435\u0439"
+      dialogueText: aaaa
+      portrait: {fileID: 21300000, guid: b7bb80ac24694e742a1902177d74b61d, type: 3}
+    - speakerName: "\u0414\u0440\u0430\u043A\u043E\u043D"
+      dialogueText: 202020
+      portrait: {fileID: 21300000, guid: ec86d7235133ae841a8c4f88f8393f4e, type: 3}

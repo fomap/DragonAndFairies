@@ -52,7 +52,7 @@ public class Dialogue : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            DontDestroyOnLoad(dialogueCanvas);
+         //   DontDestroyOnLoad(dialogueCanvas);
         }
         else
         {

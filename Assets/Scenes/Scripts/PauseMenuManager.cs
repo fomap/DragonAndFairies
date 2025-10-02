@@ -10,13 +10,13 @@ public class PauseMenuManager : MonoBehaviour
 
     private void Update()
     {
-    if (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.pKey.wasPressedThisFrame) 
-    {
-        if (isPaused) Resume();
-        else Pause();
+    // if (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.pKey.wasPressedThisFrame) 
+    // {
+    //     if (isPaused) Resume();
+    //     else Pause();
 
-        isPaused = !isPaused;
-    }
+    //     isPaused = !isPaused;
+    // }
     }
 
     public void Pause()
@@ -34,6 +34,7 @@ public class PauseMenuManager : MonoBehaviour
     public void Home()
     {
         Time.timeScale = 1f;
+        pauseMenuUI.SetActive(false);
         SceneManager.LoadScene(0);
     }
 }

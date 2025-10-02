@@ -18,7 +18,7 @@ public class DialogueGroup
 public class DialogueEntry
 {
     public string speakerName;
-    [TextArea(5, 5)]
+    [TextArea(6, 6)]
     public string dialogueText;
     public Sprite portrait;
 }

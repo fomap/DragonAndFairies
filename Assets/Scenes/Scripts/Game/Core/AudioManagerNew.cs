@@ -88,6 +88,7 @@ public class AudioManagerNew : MonoBehaviour
         {
            
             bgMusic.clip = levelMusic.musicClip;
+            bgMusic.loop = true;
             bgMusic.Play();
         }
     }

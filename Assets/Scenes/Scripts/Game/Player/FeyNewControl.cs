@@ -186,13 +186,15 @@ public class FeyNewControl : MonoBehaviour
         if (currentBoxes == minBoxesNumber)
         {
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+            
             if (Dialogue.Instance != null && Dialogue.Instance.IsDialogueActive)
             {
                 Dialogue.Instance.QueueLevelLoad(); // wait for dialogue to finish
             }
             else
             {
-                // load immediately if no dialogue is showing
+
                 SceneManager.LoadScene(sceneIndex + 1);
             }
 

@@ -161,23 +161,25 @@ public class Dialogue : MonoBehaviour
         pendingLevelLoad = true;
     }
 
-
-
     private void CheckForDialogueTrigger(int currentCount)
     {
-        Debug.Log($"CheckForDialogueTrigger called with count {currentCount}");
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        
+      
+        if (GameProgressManager.Instance.HasPlayedDialogue(currentLevelIndex, currentCount))
+        {
+            Debug.Log("Dialogue already played, skipping.");
+            return;
+        }
 
         DialogueGroup targetGroup = dialogueData.dialogueGroups
             .Find(group => group.triggerAtMoveCount == currentCount);
 
         if (targetGroup != null)
         {
-            Debug.Log($"Found dialogue group for count {currentCount}");
+            Debug.Log($"Found and playing dialogue for count {currentCount}");
+            GameProgressManager.Instance.MarkDialogueAsPlayed(currentLevelIndex, currentCount);
             StartCoroutine(DisplayDialogueGroup(targetGroup.dialogueEntries));
-        }
-        else
-        {
-            Debug.Log("No dialogue group found for this count");
         }
     }
 

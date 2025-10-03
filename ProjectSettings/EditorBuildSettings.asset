@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scenes/TileBased/level0.unity
     guid: 62533d5e48988174dade52494a8e04b4
-  - enabled: 0
-    path: Assets/Scenes/Scenes/oldScenes/nottheDialogueTest.unity
-    guid: 00bc23061b1414e42aa66104b0ff18cc
   - enabled: 1
     path: Assets/Scenes/Scenes/TileBased/level1.unity
     guid: ab950ca05b8bf5a4a90c541f606fd7af
@@ -38,5 +35,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scenes/TileBased/level9.unity
     guid: 54682c974be999443b9d8e71d84b2b7f
+  - enabled: 1
+    path: Assets/Scenes/Scenes/TileBased/level10.unity
+    guid: 341251439be19274cb6d9355034a144c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: dc2aadaffa712d84baafca43fce0ddae, type: 3}

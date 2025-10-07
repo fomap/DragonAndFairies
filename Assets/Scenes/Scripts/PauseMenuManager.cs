@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 public class PauseMenuManager : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenuUI;
+     [SerializeField] GameObject pauseBtn;
+      [SerializeField] GameObject  menuPanel;
+
     private bool isPaused = false;
 
     private void Update()
@@ -35,6 +38,9 @@ public class PauseMenuManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         pauseMenuUI.SetActive(false);
+        pauseBtn.SetActive(false);
+        menuPanel.SetActive(true);
+         GlobalSkyfallEventManager.Instance?.ResumeGame();
         SceneManager.LoadScene(0);
     }
 }

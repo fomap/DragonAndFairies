@@ -26,11 +26,12 @@ public class quit : MonoBehaviour
 
             if (currLvl == "level10")
             {
+                 GlobalSkyfallEventManager.Instance?.ResumeGame();
                 SceneManager.LoadScene(0);
             }
-            else
+            else if(currLvl == "level0")
             {
-                Debug.Log("Quitting applicaiton");
+            Debug.Log("Quitting applicaiton");
             Application.Quit();
             }
        

@@ -8,6 +8,11 @@ public class LevelSelector : MonoBehaviour
 {
     public Button[] levelButtons;
 
+    [SerializeField] GameObject menuPanel;
+    [SerializeField] GameObject PauseBtn;
+
+    [SerializeField] GameObject levelSelectPanel;
+
     void Start()
     {
 
@@ -28,20 +33,51 @@ public class LevelSelector : MonoBehaviour
 
     public void LoadLevelByIndex(int buildIndex)
     {
-
-
         Time.timeScale = 1f;
-        SceneManager.LoadScene(buildIndex);
+
+
+
+
+        StartCoroutine(LoadLevelAsync(buildIndex));
+
+
+        menuPanel.SetActive(false);
+        levelSelectPanel.SetActive(false);
+        PauseBtn.SetActive(true);
+        GlobalSkyfallEventManager.Instance?.ResumeGame();
+
+
+
+
+
+        //SceneManager.LoadScene(buildIndex);
 
     }
 
-
-
-    public void LoadLevel(string sceneName)
+    private IEnumerator LoadLevelAsync(int buildIndex)
     {
-      
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildIndex);
+
+        asyncLoad.allowSceneActivation = false;
+
+        while (!asyncLoad.isDone)
+        {   
+            if (asyncLoad.progress >= 0.9f)
+            {
+            asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return null;
+
+            // yield return new WaitForSeconds(0.5f); 
+        }
+        
+          menuPanel.SetActive(false);
+        levelSelectPanel.SetActive(false);
+        PauseBtn.SetActive(true);
+            
+
     }
 
 }

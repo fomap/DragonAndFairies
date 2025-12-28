@@ -6,10 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Dialogueold : MonoBehaviour
+public class Dialogue : MonoBehaviour
 {
 
-    public static Dialogueold Instance { get; private set; }
+    public static Dialogue Instance { get; private set; }
 
     [SerializeField] private DialogueData dialogueData;
     private AsyncOperation asyncLoadOperation;

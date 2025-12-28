@@ -15,7 +15,7 @@ public class Dialogue : MonoBehaviour
     private AsyncOperation asyncLoadOperation;
     private bool pendingLevelLoad = false;
     
-     public bool IsDialogueActive => dialogueCanvas.activeSelf;
+    public bool IsDialogueActive => dialogueCanvas.activeSelf;
 
 
     [Header("UI refs")]
@@ -166,7 +166,7 @@ public class Dialogue : MonoBehaviour
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         
       
-        if (GameProgressManager.Instance.HasPlayedDialogue(currentLevelIndex, currentCount))
+        if (GameProgressManager.Instance.HasPlayedDialogue(currentLevelIndex))
         {
             Debug.Log("Dialogue already played, skipping.");
             return;
@@ -178,7 +178,7 @@ public class Dialogue : MonoBehaviour
         if (targetGroup != null)
         {
             Debug.Log($"Found and playing dialogue for count {currentCount}");
-            GameProgressManager.Instance.MarkDialogueAsPlayed(currentLevelIndex, currentCount);
+            GameProgressManager.Instance.MarkDialogueAsPlayed(currentLevelIndex);
             StartCoroutine(DisplayDialogueGroup(targetGroup.dialogueEntries));
         }
     }

@@ -627,7 +627,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8693023352711842743
 RectTransform:
   m_ObjectHideFlags: 0
@@ -734,7 +734,7 @@ RectTransform:
   m_Father: {fileID: 1704916542351760560}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1081,7 +1081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7387951332217164962
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3517,7 +3517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4166403632870418332
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3776,7 +3776,7 @@ GameObject:
   - component: {fileID: 6847297489375909485}
   - component: {fileID: 5080616090418557868}
   - component: {fileID: 1262389845586631427}
-  - component: {fileID: 271255603465873167}
+  - component: {fileID: 5741336363500680799}
   m_Layer: 5
   m_Name: UIManagerNew
   m_TagString: Untagged
@@ -3874,7 +3874,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &271255603465873167
+--- !u!114 &5741336363500680799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3883,10 +3883,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6549930878934552893}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3797f37ec23531042be0b0ee3d02968b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1210b25a5535a734fb01fc7bf1a076b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueData: {fileID: 11400000, guid: 737132c731aad4644854b00340496b19, type: 2}
+  playOnLevelStart: 1
+  dialogueResourcesPath: Dialogues
   dialogueCanvas: {fileID: 2727141196905281228}
   speakerName: {fileID: 9021149079220161624}
   dialogueText: {fileID: 7178780471917819160}
@@ -4848,7 +4849,7 @@ RectTransform:
   m_Father: {fileID: 7670900517208664796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

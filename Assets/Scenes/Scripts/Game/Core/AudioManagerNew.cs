@@ -40,7 +40,11 @@ public class AudioManagerNew : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //musicSlider = FindAnyObjectByType<Slider>();
+        if(musicSlider == null)
+        {
+            musicSlider = FindAnyObjectByType<Slider>();
+        }
+
     }
 
     private void Start()

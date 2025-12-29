@@ -4789,6 +4789,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dee432a3c17de56428840f54db1963a2, type: 3}
+--- !u!114 &586945437 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6727693956173866048, guid: dee432a3c17de56428840f54db1963a2, type: 3}
+  m_PrefabInstance: {fileID: 586945436}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &628255241
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4844,7 +4855,7 @@ PrefabInstance:
     - target: {fileID: 7497333892656771926, guid: f2dc1c7543bad574caf89917e836ba52, type: 3}
       propertyPath: musicSlider
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 586945437}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10554,7 +10565,7 @@ Camera:
   far clip plane: 1000
   field of view: 112
   orthographic: 1
-  orthographic size: 15.01674
+  orthographic size: 10.161518
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

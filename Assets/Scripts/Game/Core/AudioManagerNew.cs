@@ -42,7 +42,9 @@ public class AudioManagerNew : MonoBehaviour
 
         if(musicSlider == null)
         {
-            musicSlider = FindAnyObjectByType<Slider>();
+            // musicSlider = GetComponent<Slider>(); 
+            musicSlider = FindObjectOfType<Slider>();
+            // FindAnyObjectByType<Slider>();
         }
 
     }

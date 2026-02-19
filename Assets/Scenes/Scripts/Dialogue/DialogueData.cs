@@ -10,7 +10,8 @@ public class DialogueData : ScriptableObject
 [System.Serializable]
 public class DialogueGroup
 {
-    public int triggerAtMoveCount; 
+    // public int triggerAtMoveCount; 
+    public int triggerAtLevelIndex;
     public List<DialogueEntry> dialogueEntries;
 }
 

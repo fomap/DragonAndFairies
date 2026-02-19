@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelRestarter : MonoBehaviour
 {
     private string currLvl;
+    private bool isRestarting;
 
     private void Start()
     {
@@ -15,16 +16,28 @@ public class LevelRestarter : MonoBehaviour
 
     private void Update()
     {
-        // Restart level when R is pressed
-        if (Input.GetKeyDown(KeyCode.R))
+        if (!isRestarting && Input.GetKeyDown(KeyCode.R))
         {
             RestartLevel();
         }
     }
 
-
     private void RestartLevel()
     {
-        SceneManager.LoadScene(currLvl);
+        if (isRestarting) return;
+        isRestarting = true;
+        StartCoroutine(RestartLevelAsync());
+    }
+
+     private IEnumerator RestartLevelAsync()
+    {
+        AsyncOperation op = SceneManager.LoadSceneAsync(currLvl);
+        op.allowSceneActivation = false;
+
+        while (op.progress < 0.9f)
+        {
+            yield return null;
+        }
+        op.allowSceneActivation = true;
     }
 }

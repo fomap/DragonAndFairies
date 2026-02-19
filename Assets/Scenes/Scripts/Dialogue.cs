@@ -8,15 +8,12 @@ using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
-
     public static Dialogue Instance { get; private set; }
 
     [SerializeField] private DialogueData dialogueData;
-    private AsyncOperation asyncLoadOperation;
     private bool pendingLevelLoad = false;
-    
-     public bool IsDialogueActive => dialogueCanvas.activeSelf;
 
+    public bool IsDialogueActive => dialogueCanvas.activeSelf;
 
     [Header("UI refs")]
     [SerializeField] private GameObject dialogueCanvas;
@@ -24,27 +21,11 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private Image portraitImage;
 
-
-
     [Header("Typewriter Effect")]
     [SerializeField] private float typewriterSpeed = 0.05f;
 
     private bool isTyping = false;
     private Coroutine typingCoroutine;
-
-
-    private void OnEnable()
-    {
-        GlobalSkyfallEventManager.OnBoxMoved += CheckForDialogueTrigger;
-    }
-
-    private void OnDisable()
-    {
-        GlobalSkyfallEventManager.OnBoxMoved -= CheckForDialogueTrigger;
-    }
-
-
-
 
     private void Awake()
     {
@@ -52,14 +33,48 @@ public class Dialogue : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-         //   DontDestroyOnLoad(dialogueCanvas);
         }
         else
         {
             Destroy(gameObject);
         }
     }
+    private void OnEnable()
+    {
+        SceneReadyNotifier.OnSceneReady += OnSceneReady;
+    }
 
+    private void OnDisable()
+    {
+        SceneReadyNotifier.OnSceneReady -= OnSceneReady;
+    }
+
+    private void OnSceneReady()
+    {
+        TryPlayLevelDialogue();
+    }
+    private void TryPlayLevelDialogue()
+    {
+        if (dialogueData == null || dialogueData.dialogueGroups == null)
+            return;
+
+        int levelIndex = SceneManager.GetActiveScene().buildIndex;
+
+        if (GameProgressManager.Instance != null &&
+            GameProgressManager.Instance.HasPlayedDialogue(levelIndex, 0))
+        {
+            return;
+        }
+
+        DialogueGroup targetGroup = dialogueData.dialogueGroups
+            .Find(g => g.triggerAtLevelIndex == levelIndex);
+
+        if (targetGroup == null)
+            return;
+
+        GameProgressManager.Instance?.MarkDialogueAsPlayed(levelIndex, 0);
+        StartCoroutine(DisplayDialogueGroup(targetGroup.dialogueEntries));
+    }
 
     private IEnumerator DisplayDialogueGroup(List<DialogueEntry> dialogueEntries)
     {
@@ -67,14 +82,12 @@ public class Dialogue : MonoBehaviour
         {
             ShowDialogueEntry(entry);
 
-           
             if (typingCoroutine != null)
             {
                 StopCoroutine(typingCoroutine);
             }
             typingCoroutine = StartCoroutine(TypeText(entry.dialogueText));
 
-         
             bool lineFinished = false;
             while (!lineFinished)
             {
@@ -82,7 +95,6 @@ public class Dialogue : MonoBehaviour
                 {
                     if (isTyping)
                     {
-                        
                         SkipTyping(entry.dialogueText);
                     }
                     else
@@ -96,7 +108,6 @@ public class Dialogue : MonoBehaviour
 
         OnDialogueFinished();
     }
-
 
     private IEnumerator TypeText(string text)
     {
@@ -121,6 +132,7 @@ public class Dialogue : MonoBehaviour
         dialogueText.text = fullText;
         isTyping = false;
     }
+
     private void ShowDialogueEntry(DialogueEntry entry)
     {
         speakerName.text = entry.speakerName;
@@ -131,14 +143,11 @@ public class Dialogue : MonoBehaviour
         GlobalSkyfallEventManager.Instance?.PauseGame();
     }
 
-
     public void OnDialogueFinished()
     {
         dialogueCanvas.SetActive(false);
-        
         GlobalSkyfallEventManager.Instance?.ResumeGame();
-        
-        
+
         if (pendingLevelLoad)
         {
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -152,37 +161,10 @@ public class Dialogue : MonoBehaviour
             }
             pendingLevelLoad = false;
         }
-
-
     }
 
     public void QueueLevelLoad()
     {
         pendingLevelLoad = true;
     }
-
-    private void CheckForDialogueTrigger(int currentCount)
-    {
-        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        
-      
-        if (GameProgressManager.Instance.HasPlayedDialogue(currentLevelIndex, currentCount))
-        {
-            Debug.Log("Dialogue already played, skipping.");
-            return;
-        }
-
-        DialogueGroup targetGroup = dialogueData.dialogueGroups
-            .Find(group => group.triggerAtMoveCount == currentCount);
-
-        if (targetGroup != null)
-        {
-            Debug.Log($"Found and playing dialogue for count {currentCount}");
-            GameProgressManager.Instance.MarkDialogueAsPlayed(currentLevelIndex, currentCount);
-            StartCoroutine(DisplayDialogueGroup(targetGroup.dialogueEntries));
-        }
-    }
-
-
-
 }
